@@ -132,6 +132,14 @@ class Core(CorePluginBase):
 
 
   @export
+  def get_original_settings(self):
+
+    log.debug("Get original settings")
+
+    return dict(self._initial_settings)
+
+
+  @export
   def set_preferences(self, preferences):
 
     log.debug("Set preferences")
