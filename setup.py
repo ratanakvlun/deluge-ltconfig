@@ -1,7 +1,7 @@
 #
 # setup.py
 #
-# Copyright (C) 2009 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2014 Ratanak Lun <ratanakvlun@gmail.com>
 #
 # Basic plugin template created by:
 # Copyright (C) 2008 Martijn Voncken <mvoncken@gmail.com>
@@ -42,7 +42,7 @@ from setuptools import setup
 __plugin_name__ = "ltConfig"
 __author__ = "Ratanak Lun"
 __author_email__ = "ratanakvlun@gmail.com"
-__version__ = "0.2"
+__version__ = "0.2.1"
 __url__ = "http://github.com/ratanakvlun"
 __license__ = "GPLv3"
 __description__ = "Modify libtorrent settings"

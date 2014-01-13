@@ -1,3 +1,6 @@
+Version 0.2.1
+- Fix bug where disabled settings were changed to default and applied
+
 Version 0.2
 - Selectively apply only certain settings
 - Specify whether to apply settings at startup
