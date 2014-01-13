@@ -114,26 +114,35 @@ class GtkUI(GtkPluginBase):
 
   def _build_view(self):
 
-    model = gtk.ListStore(str, gobject.TYPE_PYOBJECT)
+    model = gtk.ListStore(bool, str, gobject.TYPE_PYOBJECT)
     view = gtk.TreeView(model)
 
-    col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text=0)
+    col = gtk.TreeViewColumn(_("Enable"))
+    view.append_column(col)
+
+    cr = gtk.CellRendererToggle()
+    cr.connect("toggled", self._do_enabled, model, 0)
+    col.pack_start(cr)
+    col.set_cell_data_func(cr, self._render_cell, "toggle")
+
+    col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text=1)
     view.append_column(col)
 
     col = gtk.TreeViewColumn(_("Value"))
     view.append_column(col)
 
     cr = gtk.CellRendererText()
-    cr.set_property("editable", True)
     cr.set_property("xalign", 0.0)
-    cr.connect("edited", self._do_edited, model)
+    cr.connect("edited", self._do_edited, model, 2)
     col.pack_start(cr)
+    col.set_attributes(cr, editable=0, sensitive=0)
     col.set_cell_data_func(cr, self._render_cell, "text")
 
     cr = gtk.CellRendererToggle()
     cr.set_property("xalign", 0.0)
-    cr.connect("toggled", self._do_toggled, model)
+    cr.connect("toggled", self._do_toggled, model, 2)
     col.pack_start(cr)
+    col.set_attributes(cr, activatable=0, sensitive=0)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
     return view
@@ -145,32 +154,39 @@ class GtkUI(GtkPluginBase):
     model.clear()
 
     for k in sorted(settings):
-      model.append((k, settings[k]))
+      model.append((True, k, settings[k]))
 
     self._modified = False
 
 
-  def _do_edited(self, cell, path, text, model):
+  def _do_edited(self, cell, path, text, model, column):
 
-    value = model[path][1]
+    value = model[path][column]
     val_type = type(value)
 
-    model[path][1] = val_type(text)
+    model[path][column] = val_type(text)
 
     self._modified = True
 
 
-  def _do_toggled(self, cell, path, model):
+  def _do_toggled(self, cell, path, model, column):
 
-    model[path][1] = not model[path][1]
+    model[path][column] = not model[path][column]
 
     self._modified = True
+
+
+  def _do_enabled(self, cell, path, model, column):
+
+    self._do_toggled(cell, path, model, column)
 
 
   def _render_cell(self, col, cell, model, iter, cell_type):
 
-    name = model[iter][0]
-    value = model[iter][1]
+    for i, column in enumerate(col.get_tree_view().get_columns()):
+      if col == column: break
+
+    value = model[iter][i]
     val_type = type(value)
     visible = True
 
