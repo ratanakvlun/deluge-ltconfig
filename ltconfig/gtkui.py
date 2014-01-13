@@ -67,11 +67,15 @@ log.addFilter(prefix_filter)
 class GtkUI(GtkPluginBase):
 
 
+  def __init__(self, plugin_name):
+
+    super(GtkUI, self).__init__(plugin_name)
+    self._initialized = False
+
+
   def enable(self):
 
     log.debug("Enabling GtkUI...")
-
-    self._modified = False
 
     self._ui = gtk.glade.XML(get_resource("wnd_preferences.glade"))
 
@@ -87,14 +91,24 @@ class GtkUI(GtkPluginBase):
 
     self._blk_prefs.show_all()
 
+    client.core.get_libtorrent_version().addCallback(self._do_update_version)
+    client.ltconfig.get_original_settings().addCallback(self._do_complete_init)
+
+
+  def _do_complete_init(self, settings):
+
+    self._initial_settings = settings
+
+    self._row_map = {}
+    self._build_model(self._initial_settings)
+
     component.get("Preferences").add_page(DISPLAY_NAME, self._blk_prefs)
     component.get("PluginManager").register_hook(
         "on_apply_prefs", self._do_save_preferences)
     component.get("PluginManager").register_hook(
         "on_show_prefs", self._do_load_preferences)
 
-    client.core.get_libtorrent_version().addCallback(self._do_update_version)
-    self._do_load_preferences()
+    self._initialized = True
 
     log.debug("GtkUI enabled")
 
@@ -102,6 +116,8 @@ class GtkUI(GtkPluginBase):
   def disable(self):
 
     log.debug("Disabling GtkUI...")
+
+    self._initialized = False
 
     component.get("Preferences").remove_page(DISPLAY_NAME)
     component.get("PluginManager").deregister_hook(
@@ -121,7 +137,7 @@ class GtkUI(GtkPluginBase):
     view.append_column(col)
 
     cr = gtk.CellRendererToggle()
-    cr.connect("toggled", self._do_enabled, model, 0)
+    cr.connect("toggled", self._do_enable_toggled, model, 0)
     col.pack_start(cr)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
@@ -148,15 +164,16 @@ class GtkUI(GtkPluginBase):
     return view
 
 
-  def _update_view(self, settings):
+  def _build_model(self, settings):
 
     model = self._view.get_model()
     model.clear()
+    map = {}
 
     for k in sorted(settings):
-      model.append((True, k, settings[k]))
+      map[k] = model.append((False, k, settings[k]))
 
-    self._modified = False
+    self._row_map = map
 
 
   def _do_edited(self, cell, path, text, model, column):
@@ -166,19 +183,20 @@ class GtkUI(GtkPluginBase):
 
     model[path][column] = val_type(text)
 
-    self._modified = True
-
 
   def _do_toggled(self, cell, path, model, column):
 
     model[path][column] = not model[path][column]
 
-    self._modified = True
 
+  def _do_enable_toggled(self, cell, path, model, column):
 
-  def _do_enabled(self, cell, path, model, column):
+    name = model[path][1]
 
-    self._do_toggled(cell, path, model, column)
+    if model[path][column]:
+      model[path][2] = self._initial_settings[name]
+
+    model[path][column] = not model[path][column]
 
 
   def _render_cell(self, col, cell, model, iter, cell_type):
@@ -217,32 +235,43 @@ class GtkUI(GtkPluginBase):
 
   def _do_save_preferences(self):
 
-    if self._modified:
-      log.debug("Save preferences")
+    log.debug("Save preferences")
 
-      settings = {}
+    if not self._initialized:
+      log.debug("Not initialized")
+      return
 
-      for row in self._view.get_model():
-        settings[row[0]] = row[1]
+    settings = {}
 
-      preferences = {
-        "settings": settings,
-        "apply_on_start": self._chk_apply_on_start.get_active(),
-      }
+    for row in self._view.get_model():
+      if row[0]:
+        settings[row[1]] = row[2]
 
-      client.ltconfig.set_preferences(preferences)
+    preferences = {
+      "settings": settings,
+      "apply_on_start": self._chk_apply_on_start.get_active(),
+    }
 
-      self._modified = False
+    client.ltconfig.set_preferences(preferences)
 
 
   def _do_load_preferences(self):
 
     log.debug("Load preferences")
 
+    if not self._initialized:
+      log.debug("Not initialized")
+      return
+
     client.ltconfig.get_preferences().addCallback(self._update_preferences)
-    client.ltconfig.get_settings().addCallback(self._update_view)
 
 
   def _update_preferences(self, preferences):
 
     self._chk_apply_on_start.set_active(preferences["apply_on_start"])
+
+    settings = preferences["settings"]
+    model = self._view.get_model()
+
+    for key in settings:
+      model.set(self._row_map[key], 0, True, 2, settings[key])
