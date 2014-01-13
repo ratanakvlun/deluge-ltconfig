@@ -1,2 +1,7 @@
+Version 0.2
+- Selectively apply only certain settings
+- Specify whether to apply settings at startup
+- Display actual libtorrent settings
+
 Version 0.1
 - Initial version
