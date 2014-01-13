@@ -130,13 +130,16 @@ class GtkUI(GtkPluginBase):
 
   def _build_view(self):
 
-    model = gtk.ListStore(bool, str, gobject.TYPE_PYOBJECT)
+    model = gtk.ListStore(bool, str,
+      gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
     view = gtk.TreeView(model)
 
-    col = gtk.TreeViewColumn(_("Enable"))
+    col = gtk.TreeViewColumn()
+
     view.append_column(col)
 
     cr = gtk.CellRendererToggle()
+    cr.set_property("xpad", 4)
     cr.connect("toggled", self._do_enable_toggled, model, 0)
     col.pack_start(cr)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
@@ -144,7 +147,7 @@ class GtkUI(GtkPluginBase):
     col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text=1)
     view.append_column(col)
 
-    col = gtk.TreeViewColumn(_("Value"))
+    col = gtk.TreeViewColumn(_("Setting"))
     view.append_column(col)
 
     cr = gtk.CellRendererText()
@@ -161,6 +164,19 @@ class GtkUI(GtkPluginBase):
     col.set_attributes(cr, activatable=0, sensitive=0)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
+    col = gtk.TreeViewColumn(_("Actual"))
+    view.append_column(col)
+
+    cr = gtk.CellRendererText()
+    cr.set_property("xalign", 0.0)
+    col.pack_start(cr)
+    col.set_cell_data_func(cr, self._render_cell, "text")
+
+    cr = gtk.CellRendererToggle()
+    cr.set_property("xalign", 0.0)
+    col.pack_start(cr)
+    col.set_cell_data_func(cr, self._render_cell, "toggle")
+
     return view
 
 
@@ -171,7 +187,7 @@ class GtkUI(GtkPluginBase):
     map = {}
 
     for k in sorted(settings):
-      map[k] = model.append((False, k, settings[k]))
+      map[k] = model.append((False, k, settings[k], settings[k]))
 
     self._row_map = map
 
@@ -275,3 +291,13 @@ class GtkUI(GtkPluginBase):
 
     for key in settings:
       model.set(self._row_map[key], 0, True, 2, settings[key])
+
+    client.ltconfig.get_settings().addCallback(self._update_actual_values)
+
+
+  def _update_actual_values(self, settings):
+
+    model = self._view.get_model()
+
+    for key in settings:
+      model.set(self._row_map[key], 3, settings[key])
