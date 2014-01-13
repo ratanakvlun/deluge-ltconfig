@@ -1,6 +1,6 @@
 /*
 Script: ltconfig.js
-    The client-side javascript code for the MoveTools plugin.
+    The client-side javascript code for the ltConfig plugin.
 
 Copyright:
     (C) Ratanak Lun 2013 <ratanakvlun@gmail.com>
