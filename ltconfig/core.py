@@ -83,11 +83,8 @@ class Core(CorePluginBase):
         CONFIG_FILE, DEFAULT_PREFS)
 
     self._initial_settings = self._get_session_settings(self._session)
+
     self._settings = self._config["settings"]
-
-    if not self._settings:
-      self._settings.update(self._initial_settings)
-
     self._normalize_settings(self._settings)
 
     if self._config["apply_on_start"]:
@@ -149,11 +146,16 @@ class Core(CorePluginBase):
     settings = preferences["settings"]
     self._normalize_settings(settings)
 
+    self._settings.clear()
     self._settings.update(settings)
 
     self._config.save()
 
-    self._apply_settings(self._settings)
+    for key in self._initial_settings:
+      if key not in settings.keys():
+        settings[key] = self._initial_settings[key]
+
+    self._apply_settings(settings)
 
 
   @export
