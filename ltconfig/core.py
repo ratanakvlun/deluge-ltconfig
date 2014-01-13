@@ -57,6 +57,8 @@ from common import prefix_filter
 
 
 
+CONFIG_FILE = "%s.conf" % MODULE_NAME
+
 DEFAULT_PREFS = {
   "settings": {}
 }
@@ -77,7 +79,7 @@ class Core(CorePluginBase):
 
     self._session = component.get("Core").session
     self._config = deluge.configmanager.ConfigManager(
-        "%s.conf" % MODULE_NAME, DEFAULT_PREFS)
+        CONFIG_FILE, DEFAULT_PREFS)
 
     self._initial_settings = self._get_session_settings(self._session)
     self._settings = self._config["settings"]
@@ -96,7 +98,7 @@ class Core(CorePluginBase):
     log.debug("Disabling Core...")
 
     self._config.save()
-    deluge.configmanager.close(self._config)
+    deluge.configmanager.close(CONFIG_FILE)
 
     self._rpc_deregister(PLUGIN_NAME)
 
