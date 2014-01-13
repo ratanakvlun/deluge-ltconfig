@@ -60,7 +60,8 @@ from common import prefix_filter
 CONFIG_FILE = "%s.conf" % MODULE_NAME
 
 DEFAULT_PREFS = {
-  "settings": {}
+  "apply_on_start": False,
+  "settings": {},
 }
 
 
@@ -88,7 +89,9 @@ class Core(CorePluginBase):
       self._settings.update(self._initial_settings)
 
     self._normalize_settings(self._settings)
-    self._apply_settings(self._settings)
+
+    if self._config["apply_on_start"]:
+      self._apply_settings(self._settings)
 
     log.debug("Core enabled")
 
@@ -126,6 +129,36 @@ class Core(CorePluginBase):
     settings = self._get_session_settings(self._session)
 
     return settings
+
+
+  @export
+  def set_preferences(self, preferences):
+
+    log.debug("Set preferences")
+
+    self._config["apply_on_start"] = preferences["apply_on_start"]
+
+    settings = preferences["settings"]
+    self._normalize_settings(settings)
+
+    self._settings.update(settings)
+
+    self._config.save()
+
+    self._apply_settings(self._settings)
+
+
+  @export
+  def get_preferences(self):
+
+    log.debug("Get preferences")
+
+    preferences = {
+      "apply_on_start": self._config["apply_on_start"],
+      "settings": dict(self._settings),
+    }
+
+    return preferences
 
 
   def _get_session_settings(self, session):
