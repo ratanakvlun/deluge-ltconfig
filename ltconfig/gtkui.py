@@ -77,6 +77,7 @@ class GtkUI(GtkPluginBase):
 
     self._blk_prefs = self._ui.get_widget("blk_preferences")
     self._lbl_ver = self._ui.get_widget("lbl_version")
+    self._chk_apply_on_start = self._ui.get_widget("chk_apply_on_start")
     self._blk_view = self._ui.get_widget("blk_view")
 
     self._view = self._build_view()
@@ -88,12 +89,12 @@ class GtkUI(GtkPluginBase):
 
     component.get("Preferences").add_page(DISPLAY_NAME, self._blk_prefs)
     component.get("PluginManager").register_hook(
-        "on_apply_prefs", self._do_save_settings)
+        "on_apply_prefs", self._do_save_preferences)
     component.get("PluginManager").register_hook(
-        "on_show_prefs", self._do_load_settings)
+        "on_show_prefs", self._do_load_preferences)
 
     client.core.get_libtorrent_version().addCallback(self._do_update_version)
-    self._do_load_settings()
+    self._do_load_preferences()
 
     log.debug("GtkUI enabled")
 
@@ -104,9 +105,9 @@ class GtkUI(GtkPluginBase):
 
     component.get("Preferences").remove_page(DISPLAY_NAME)
     component.get("PluginManager").deregister_hook(
-        "on_apply_prefs", self._do_save_settings)
+        "on_apply_prefs", self._do_save_preferences)
     component.get("PluginManager").deregister_hook(
-        "on_show_prefs", self._do_load_settings)
+        "on_show_prefs", self._do_load_preferences)
 
     log.debug("GtkUI disabled")
 
@@ -198,23 +199,34 @@ class GtkUI(GtkPluginBase):
     self._lbl_ver.set_label(version)
 
 
-  def _do_save_settings(self):
+  def _do_save_preferences(self):
 
     if self._modified:
-      log.debug("Save settings")
+      log.debug("Save preferences")
 
       settings = {}
 
       for row in self._view.get_model():
         settings[row[0]] = row[1]
 
-      client.ltconfig.set_settings(settings)
+      preferences = {
+        "settings": settings,
+        "apply_on_start": self._chk_apply_on_start.get_active(),
+      }
+
+      client.ltconfig.set_preferences(preferences)
 
       self._modified = False
 
 
-  def _do_load_settings(self):
+  def _do_load_preferences(self):
 
-    log.debug("Load settings")
+    log.debug("Load preferences")
 
+    client.ltconfig.get_preferences().addCallback(self._update_preferences)
     client.ltconfig.get_settings().addCallback(self._update_view)
+
+
+  def _update_preferences(self, preferences):
+
+    self._chk_apply_on_start.set_active(preferences["apply_on_start"])
