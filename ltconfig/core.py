@@ -1,7 +1,7 @@
 #
 # core.py
 #
-# Copyright (C) 2013 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2014 Ratanak Lun <ratanakvlun@gmail.com>
 #
 # Basic plugin template created by:
 # Copyright (C) 2008 Martijn Voncken <mvoncken@gmail.com>
@@ -106,26 +106,11 @@ class Core(CorePluginBase):
 
 
   @export
-  def set_settings(self, settings):
-
-    log.debug("Set settings")
-
-    self._normalize_settings(settings)
-
-    self._settings.update(settings)
-    self._config.save()
-
-    self._apply_settings(self._settings)
-
-
-  @export
   def get_settings(self):
 
     log.debug("Get settings")
 
-    settings = self._get_session_settings(self._session)
-
-    return settings
+    return self._get_session_settings(self._session)
 
 
   @export

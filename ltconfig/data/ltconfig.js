@@ -3,7 +3,7 @@ Script: ltconfig.js
     The client-side javascript code for the ltConfig plugin.
 
 Copyright:
-    (C) Ratanak Lun 2013 <ratanakvlun@gmail.com>
+    (C) Ratanak Lun 2014 <ratanakvlun@gmail.com>
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3, or (at your option)
@@ -34,7 +34,7 @@ Copyright:
 
 PLUGIN_NAME = 'ltConfig';
 MODULE_NAME = 'ltconfig';
-DISPLAY_NAME = _('lt Config');
+DISPLAY_NAME = _('ltConfig');
 
 
 ltConfigPlugin = Ext.extend(Deluge.Plugin, {

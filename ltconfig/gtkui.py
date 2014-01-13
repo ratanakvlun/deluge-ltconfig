@@ -1,7 +1,7 @@
 #
 # gtkui.py
 #
-# Copyright (C) 2013 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2014 Ratanak Lun <ratanakvlun@gmail.com>
 #
 # Basic plugin template created by:
 # Copyright (C) 2008 Martijn Voncken <mvoncken@gmail.com>
@@ -135,7 +135,6 @@ class GtkUI(GtkPluginBase):
     view = gtk.TreeView(model)
 
     col = gtk.TreeViewColumn()
-
     view.append_column(col)
 
     cr = gtk.CellRendererToggle()
