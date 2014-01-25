@@ -47,6 +47,9 @@ import gtk
 import gtk.glade
 
 
+from twisted.internet import reactor
+
+
 from deluge.ui.client import client
 from deluge.plugins.pluginbase import GtkPluginBase
 import deluge.component as component
@@ -109,6 +112,7 @@ class GtkUI(GtkPluginBase):
     component.get("PluginManager").register_hook(
         "on_show_prefs", self._do_load_preferences)
 
+    self._saving = False
     self._initialized = True
 
     log.debug("GtkUI enabled")
@@ -283,6 +287,8 @@ class GtkUI(GtkPluginBase):
       log.debug("Not initialized")
       return
 
+    self._saving = True
+
     settings = {}
 
     for row in self._view.get_model():
@@ -294,7 +300,14 @@ class GtkUI(GtkPluginBase):
       "apply_on_start": self._chk_apply_on_start.get_active(),
     }
 
-    client.ltconfig.set_preferences(preferences)
+
+    def on_save_returned(result):
+
+      self._saving = False
+
+
+    client.ltconfig.set_preferences(preferences).addCallbacks(
+      on_save_returned, on_save_returned)
 
 
   def _do_load_preferences(self):
@@ -303,6 +316,11 @@ class GtkUI(GtkPluginBase):
 
     if not self._initialized:
       log.debug("Not initialized")
+      return
+
+    if self._saving:
+      log.debug("Load deferred: save in progess")
+      reactor.callLater(0.1, self._do_load_preferences)
       return
 
     client.ltconfig.get_preferences().addCallback(self._update_preferences)
