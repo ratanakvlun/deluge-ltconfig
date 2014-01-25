@@ -136,7 +136,11 @@ class Core(CorePluginBase):
 
     self._config.save()
 
-    self._apply_settings(self._settings)
+    for key in self._initial_settings:
+      if key not in settings.keys():
+        settings[key] = self._initial_settings[key]
+
+    self._apply_settings(settings)
 
 
   @export
