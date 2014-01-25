@@ -135,6 +135,27 @@ class GtkUI(GtkPluginBase):
       gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
     view = gtk.TreeView(model)
 
+
+    def on_button_pressed(widget, event):
+
+      if event.button != 1 or event.type != gtk.gdk.BUTTON_PRESS:
+        return False
+
+      x, y = event.get_coords()
+      path_info = widget.get_path_at_pos(int(x), int(y))
+      if not path_info:
+        return False
+
+      path = path_info[0]
+      column = path_info[1]
+
+      if widget.get_model()[path][0] and column is widget.get_column(2):
+        widget.set_cursor(path, column, start_editing=True)
+        return True
+
+
+    view.connect("button-press-event", on_button_pressed)
+    view.get_selection().set_mode(gtk.SELECTION_NONE)
     view.set_search_column(1)
 
     col = gtk.TreeViewColumn()
