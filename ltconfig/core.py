@@ -131,13 +131,14 @@ class Core(CorePluginBase):
     settings = preferences["settings"]
     self._normalize_settings(settings)
 
+    old_settings = dict(self._settings)
     self._settings.clear()
     self._settings.update(settings)
 
     self._config.save()
 
-    for key in self._initial_settings:
-      if key not in settings.keys():
+    for key in old_settings:
+      if key not in settings:
         settings[key] = self._initial_settings[key]
 
     self._apply_settings(settings)
