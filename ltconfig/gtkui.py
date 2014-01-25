@@ -85,9 +85,10 @@ class GtkUI(GtkPluginBase):
     self._blk_view = self._ui.get_widget("blk_view")
 
     self._view = self._build_view()
-    frame = gtk.Frame()
-    frame.add(self._view)
-    self._blk_view.add(frame)
+    window = gtk.ScrolledWindow()
+    window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+    window.add(self._view)
+    self._blk_view.add(window)
 
     self._blk_prefs.show_all()
 
