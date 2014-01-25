@@ -315,8 +315,12 @@ class GtkUI(GtkPluginBase):
     settings = preferences["settings"]
     model = self._view.get_model()
 
-    for key in settings:
-      model.set(self._row_map[key], 0, True, 2, settings[key])
+    for key in self._initial_settings:
+      if key in settings:
+        model.set(self._row_map[key], 0, True, 2, settings[key])
+        continue
+
+      model.set(self._row_map[key], 0, False, 2, self._initial_settings[key])
 
     client.ltconfig.get_settings().addCallback(self._update_actual_values)
 
