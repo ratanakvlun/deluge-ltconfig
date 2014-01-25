@@ -146,7 +146,8 @@ class GtkUI(GtkPluginBase):
     col.pack_start(cr)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
-    col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text=1)
+    col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), \
+      text=1, sensitive=0)
     view.append_column(col)
 
     col = gtk.TreeViewColumn(_("Setting"))
@@ -170,11 +171,13 @@ class GtkUI(GtkPluginBase):
     view.append_column(col)
 
     cr = gtk.CellRendererText()
+    cr.set_property("sensitive", False)
     cr.set_property("xalign", 0.0)
     col.pack_start(cr)
     col.set_cell_data_func(cr, self._render_cell, "text")
 
     cr = gtk.CellRendererToggle()
+    cr.set_property("sensitive", False)
     cr.set_property("xalign", 0.0)
     col.pack_start(cr)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
