@@ -135,6 +135,8 @@ class GtkUI(GtkPluginBase):
       gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
     view = gtk.TreeView(model)
 
+    view.set_search_column(1)
+
     col = gtk.TreeViewColumn()
     view.append_column(col)
 
