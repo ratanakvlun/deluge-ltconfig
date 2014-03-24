@@ -62,3 +62,28 @@ prefix_filter = PrefixFilter()
 def get_resource(filename):
   return pkg_resources.resource_filename(
       MODULE_NAME, os.path.join("data", filename))
+
+
+
+def dict_equals(a, b):
+
+  if len(a) != len(b):
+    return False
+
+  for key in a:
+    if key not in b:
+      return False
+
+    if isinstance(a[key], dict):
+      if not isinstance(b[key], dict):
+        return False
+
+      if a[key] is not b[key]:
+        result = dict_equals(a[key], b[key])
+        if not result:
+          return False
+    else:
+      if a[key] != b[key]:
+        return False
+
+  return True
