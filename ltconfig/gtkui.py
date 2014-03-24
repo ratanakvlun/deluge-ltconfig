@@ -59,6 +59,7 @@ from common import PLUGIN_NAME
 from common import DISPLAY_NAME
 from common import get_resource
 from common import prefix_filter
+from common import dict_equals
 
 
 
@@ -102,6 +103,7 @@ class GtkUI(GtkPluginBase):
   def _do_complete_init(self, settings):
 
     self._initial_settings = settings
+    self._prefs = {}
 
     self._row_map = {}
     self._build_model(self._initial_settings)
@@ -113,6 +115,8 @@ class GtkUI(GtkPluginBase):
         "on_show_prefs", self._do_load_preferences)
 
     self._initialized = True
+
+    self._do_load_preferences()
 
     log.debug("GtkUI enabled")
 
@@ -297,7 +301,10 @@ class GtkUI(GtkPluginBase):
       "apply_on_start": self._chk_apply_on_start.get_active(),
     }
 
-    client.ltconfig.set_preferences(preferences)
+    if not dict_equals(preferences, self._prefs):
+      client.ltconfig.set_preferences(preferences)
+    else:
+      log.debug("No settings were changed")
 
 
   def _do_load_preferences(self):
@@ -312,6 +319,8 @@ class GtkUI(GtkPluginBase):
 
 
   def _update_preferences(self, preferences):
+
+    self._prefs = preferences
 
     self._chk_apply_on_start.set_active(preferences["apply_on_start"])
 
