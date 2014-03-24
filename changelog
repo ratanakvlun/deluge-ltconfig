@@ -1,3 +1,7 @@
+Version 0.2.2.1
+- Remove save completed check
+- Save settings only if changes were made
+
 Version 0.2.2
 - Fix cancel button not discarding changes
 - Revert setting to initial value if setting was just disabled
