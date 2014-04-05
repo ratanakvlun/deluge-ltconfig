@@ -32,22 +32,207 @@ Copyright:
 */
 
 
-PLUGIN_NAME = 'ltConfig';
-MODULE_NAME = 'ltconfig';
-DISPLAY_NAME = _('ltConfig');
+Ext.namespace('Deluge.plugins.ltconfig');
+Ext.namespace('Deluge.plugins.ltconfig.ui');
 
 
-ltConfigPlugin = Ext.extend(Deluge.Plugin, {
+if (typeof(console) === 'undefined') {
+  console = {
+    log: function() {},
+  };
+}
 
-  name: PLUGIN_NAME,
 
-  onDisable: function() {
-    console.log('ltConfigPlugin.onDisable');
+Deluge.plugins.ltconfig.PLUGIN_NAME = 'ltConfig';
+Deluge.plugins.ltconfig.MODULE_NAME = 'ltconfig';
+Deluge.plugins.ltconfig.DISPLAY_NAME = _('ltConfig');
+
+
+Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
+
+  title: Deluge.plugins.ltconfig.DISPLAY_NAME,
+
+  layout: {
+    type: 'vbox',
+    align: 'stretch',
   },
 
-  onEnable: function() {
-    console.log('ltConfigPlugin.onEnable');
-  }
+  initComponent: function() {
+    Deluge.plugins.ltconfig.ui.PreferencePage.superclass.initComponent.call(
+      this);
+
+    this.chkApplyOnStart = this.add({
+      xtype: 'checkbox',
+      margins: '0 5 5 5',
+      boxLabel: _('Apply settings on startup'),
+    });
+
+    this.lblVersion = this.add({
+      xtype: 'label',
+      margins: '5 5 5 5',
+      caption: _('libtorrent version') + ": ",
+      text: this.caption + "?",
+    });
+
+    this.tblSettings = this.add({
+      xtype: 'editorgrid',
+      flex: 1,
+
+      colModel: new Ext.grid.ColumnModel({
+        defaults: {
+          renderer: function(value, meta, record, rowIndex, colIndex, store) {
+            if (colIndex == 3 || !record.data['enabled']) {
+              meta.attr = 'style="color: gray;"';
+            }
+
+            if (typeof(value) == 'number' && !(parseInt(value) === value)) {
+              return value.toFixed(6);
+            } else if (typeof(value) === 'boolean') {
+              return '<div class="x-grid3-check-col' + (value ? '-on' : '') +
+                '" style="width: 20px;">&#160;</div>';
+            }
+
+            return value;
+          },
+        },
+
+        columns: [
+          {
+            id: 'enabled',
+            header: '',
+            dataIndex: 'enabled',
+            sortable: true,
+            hideable: false,
+          },
+          {
+            id: 'name',
+            header: _("Name"),
+            dataIndex: 'name',
+            sortable: true,
+            hideable: false,
+          },
+          {
+            id: 'setting',
+            header: _("Setting"),
+            dataIndex: 'setting',
+            hideable: false,
+            editor: {
+              xtype: 'textfield',
+              allowBlank: false,
+            },
+          },
+          {
+            id: 'actual',
+            header: _("Actual"),
+            dataIndex: 'actual',
+          },
+        ],
+      }),
+
+      store: new Ext.data.ArrayStore({
+        autoDestroy: true,
+
+        fields: [
+          {name: 'enabled'},
+          {name: 'name'},
+          {name: 'setting'},
+          {name: 'actual'},
+        ],
+      }),
+
+      listeners: {
+        viewready: function(store, records, options) {
+          for (var i = 0; i < this.getColumnModel().getColumnCount(); i++) {
+            this.autoSizeColumn(i);
+          }
+        },
+
+        cellclick: function(grid, rowIndex, colIndex, e) {
+          var record = grid.getStore().getAt(rowIndex);
+          var field = grid.getColumnModel().getDataIndex(colIndex);
+          var value = record.get(field);
+
+          if (colIndex == 0 || (record.data['enabled'] && colIndex == 2)) {
+            if (typeof(value) === 'boolean') {
+              record.set(field, !value);
+              record.commit();
+            }
+          }
+        },
+
+        beforeedit: function(e) {
+          return e.record.data['enabled'];
+        },
+
+        afteredit: function(e) {
+          e.record.commit();
+        },
+      },
+
+      autoSizeColumn: function(colIndex) {
+        var longest = 1;
+
+        this.getColumnModel().setColumnWidth(colIndex, longest);
+
+        for (var i = 0; i < this.getStore().getCount(); i++) {
+          var cell = this.getView().getCell(i, colIndex);
+          longest = Math.max(longest, cell.firstChild.scrollWidth+8);
+        }
+
+        this.getColumnModel().setColumnWidth(colIndex, longest);
+      },
+    });
+
+    deluge.client.core.get_libtorrent_version({
+      success: function(version) {
+        this.lblVersion.text = this.lblVersion.caption + version;
+      },
+      scope: this,
+    });
+
+    deluge.client.ltconfig.get_original_settings({
+      success: function(settings) {
+        this.initialSettings = settings;
+
+        var keys = [];
+        var data = [];
+
+        for (var key in settings) {
+          if (settings.hasOwnProperty(key)) {
+            keys.push(key);
+          }
+        }
+
+        keys.sort();
+
+        for (var i = 0; i < keys.length; i++) {
+          key = keys[i]
+          data.push([false, key, settings[key], settings[key]]);
+        }
+
+        this.tblSettings.getStore().loadData(data);
+      },
+      scope: this,
+    });
+  },
 });
 
-Deluge.registerPlugin(PLUGIN_NAME, ltConfigPlugin);
+Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
+
+  name: Deluge.plugins.ltconfig.PLUGIN_NAME,
+
+  onEnable: function() {
+    this.preferencePage = new Deluge.plugins.ltconfig.ui.PreferencePage();
+    deluge.preferences.addPage(this.preferencePage);
+    console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
+  },
+
+  onDisable: function() {
+    deluge.preferences.removePage(this.preferencePage);
+    console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
+  },
+
+});
+
+Deluge.registerPlugin(Deluge.plugins.ltconfig.PLUGIN_NAME,
+  Deluge.plugins.ltconfig.Plugin);
