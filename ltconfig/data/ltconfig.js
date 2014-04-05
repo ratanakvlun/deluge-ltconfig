@@ -343,7 +343,7 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
   },
 
   onDisable: function() {
-    deluge.preferences.removePage(this.preferencePage);
+    deluge.preferences.removePage(this.prefsPage);
 
     deluge.preferences.un('show', this.prefsPage.onShowPage, this.prefsPage);
     deluge.preferences.buttons[2].un('click', this.prefsPage.onApply,
