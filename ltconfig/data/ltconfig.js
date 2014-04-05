@@ -255,13 +255,15 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   },
 });
 
+
 Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
 
   name: Deluge.plugins.ltconfig.PLUGIN_NAME,
 
   onEnable: function() {
-    this.preferencePage = new Deluge.plugins.ltconfig.ui.PreferencePage();
-    deluge.preferences.addPage(this.preferencePage);
+    this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
+    deluge.preferences.addPage(this.prefsPage);
+
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
   },
 
@@ -269,7 +271,6 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     deluge.preferences.removePage(this.preferencePage);
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
   },
-
 });
 
 Deluge.registerPlugin(Deluge.plugins.ltconfig.PLUGIN_NAME,
