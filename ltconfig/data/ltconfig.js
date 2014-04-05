@@ -39,7 +39,7 @@ Ext.namespace('Deluge.plugins.ltconfig.util');
 
 if (typeof(console) === 'undefined') {
   console = {
-    log: function() {},
+    log: function() {}
   };
 }
 
@@ -92,7 +92,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
   layout: {
     type: 'vbox',
-    align: 'stretch',
+    align: 'stretch'
   },
 
   initComponent: function() {
@@ -102,14 +102,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     this.chkApplyOnStart = this.add({
       xtype: 'checkbox',
       margins: '0 5 5 5',
-      boxLabel: _('Apply settings on startup'),
+      boxLabel: _('Apply settings on startup')
     });
 
     this.lblVersion = this.add({
       xtype: 'label',
       margins: '5 5 5 5',
       caption: _('libtorrent version') + ": ",
-      text: this.caption + "?",
+      text: this.caption + "?"
     });
 
     this.tblSettings = this.add({
@@ -131,7 +131,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             }
 
             return value;
-          },
+          }
         },
 
         columns: [
@@ -163,8 +163,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             id: 'actual',
             header: _("Actual"),
             dataIndex: 'actual',
-          },
-        ],
+          }
+        ]
       }),
 
       store: new Ext.data.ArrayStore({
@@ -174,8 +174,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           {name: 'enabled'},
           {name: 'name'},
           {name: 'setting'},
-          {name: 'actual'},
-        ],
+          {name: 'actual'}
+        ]
       }),
 
       listeners: {
@@ -210,7 +210,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
         afteredit: function(e) {
           e.record.commit();
-        },
+        }
       },
 
       autoSizeColumn: function(colIndex) {
@@ -224,7 +224,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         }
 
         this.getColumnModel().setColumnWidth(colIndex, longest);
-      },
+      }
     });
 
     this.onShowPage = function() {
@@ -247,7 +247,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             }
           }
         },
-        scope: this,
+        scope: this
       });
 
       deluge.client.ltconfig.get_settings({
@@ -264,7 +264,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             }
           }
         },
-        scope: this,
+        scope: this
       });
     };
 
@@ -283,7 +283,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
       var prefs = {
         apply_on_start: this.chkApplyOnStart.getValue(),
-        settings: settings,
+        settings: settings
       };
 
       same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
@@ -293,7 +293,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       if (!same) {
         deluge.client.ltconfig.set_preferences(prefs, {
           success: this.onShowPage,
-          scope: this,
+          scope: this
         });
       }
     };
@@ -302,7 +302,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       success: function(version) {
         this.lblVersion.text = this.lblVersion.caption + version;
       },
-      scope: this,
+      scope: this
     });
 
     deluge.client.ltconfig.get_original_settings({
@@ -327,9 +327,9 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
         this.tblSettings.getStore().loadData(data);
       },
-      scope: this,
+      scope: this
     });
-  },
+  }
 });
 
 
@@ -356,7 +356,7 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
       this.prefsPage);
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
-  },
+  }
 });
 
 Deluge.registerPlugin(Deluge.plugins.ltconfig.PLUGIN_NAME,
