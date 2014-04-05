@@ -115,6 +115,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     this.tblSettings = this.add({
       xtype: 'editorgrid',
       flex: 1,
+      autoExpandColumn: 'name',
 
       colModel: new Ext.grid.ColumnModel({
         defaults: {
@@ -180,9 +181,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
       listeners: {
         viewready: function(store, records, options) {
-          for (var i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.autoSizeColumn(i);
-          }
+          this.autoSizeColumn(0);
+          this.autoSizeColumn(2);
+          this.autoSizeColumn(3);
+          this.getView().refresh();
         },
 
         cellclick: function(grid, rowIndex, colIndex, e) {
