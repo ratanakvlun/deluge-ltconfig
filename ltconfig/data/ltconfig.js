@@ -119,7 +119,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       colModel: new Ext.grid.ColumnModel({
         defaults: {
           renderer: function(value, meta, record, rowIndex, colIndex, store) {
-            if (colIndex == 3 || !record.data['enabled']) {
+            if (colIndex == 3 || !record.get('enabled')) {
               meta.attr = 'style="color: gray;"';
             }
 
@@ -190,7 +190,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           var field = grid.getColumnModel().getDataIndex(colIndex);
           var value = record.get(field);
 
-          if (colIndex == 0 || (record.data['enabled'] && colIndex == 2)) {
+          if (colIndex == 0 || (record.get('enabled') && colIndex == 2)) {
             if (typeof(value) === 'boolean') {
               record.set(field, !value);
               record.commit();
@@ -199,7 +199,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         },
 
         beforeedit: function(e) {
-          return e.record.data['enabled'];
+          return e.record.get('enabled');
         },
 
         afteredit: function(e) {
