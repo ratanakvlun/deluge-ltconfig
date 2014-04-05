@@ -221,6 +221,48 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       },
     });
 
+    this.onShowPage = function() {
+      deluge.client.ltconfig.get_preferences({
+        success: function(prefs) {
+          this.preferences = prefs;
+          this.chkApplyOnStart.setValue(prefs['apply_on_start']);
+
+          var settings = prefs['settings'];
+          var store = this.tblSettings.getStore();
+
+          for (var i = 0; i < store.getCount(); i++) {
+            var record = store.getAt(i);
+            var name = record.get('name');
+
+            if (name in settings) {
+              console.log('updated %s', name);
+              record.set('enabled', true);
+              record.set('setting', settings[name]);
+              record.commit();
+            }
+          }
+        },
+        scope: this,
+      });
+
+      deluge.client.ltconfig.get_settings({
+        success: function(settings) {
+          var store = this.tblSettings.getStore();
+
+          for (var i = 0; i < store.getCount(); i++) {
+            var record = store.getAt(i);
+            var name = record.get('name');
+
+            if (name in settings) {
+              record.set('actual', settings[name]);
+              record.commit();
+            }
+          }
+        },
+        scope: this,
+      });
+    };
+
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
         this.lblVersion.text = this.lblVersion.caption + version;
@@ -264,11 +306,16 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
     deluge.preferences.addPage(this.prefsPage);
 
+    deluge.preferences.on('show', this.prefsPage.onShowPage, this.prefsPage);
+
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
   },
 
   onDisable: function() {
     deluge.preferences.removePage(this.preferencePage);
+
+    deluge.preferences.un('show', this.prefsPage.onShowPage, this.prefsPage);
+
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
   },
 });
