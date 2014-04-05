@@ -205,6 +205,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         },
 
         beforeedit: function(e) {
+          if (typeof(e.value) === 'boolean') {
+            return false;
+          }
+
           return e.record.get('enabled');
         },
 
