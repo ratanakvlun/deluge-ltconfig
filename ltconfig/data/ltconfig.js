@@ -193,6 +193,12 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           if (colIndex == 0 || (record.get('enabled') && colIndex == 2)) {
             if (typeof(value) === 'boolean') {
               record.set(field, !value);
+
+              if (colIndex == 0 && !record.get('enabled')) {
+                record.set('setting',
+                  this.initialSettings[record.get('name')]);
+              }
+
               record.commit();
             }
           }
