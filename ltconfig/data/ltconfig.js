@@ -34,6 +34,7 @@ Copyright:
 
 Ext.namespace('Deluge.plugins.ltconfig');
 Ext.namespace('Deluge.plugins.ltconfig.ui');
+Ext.namespace('Deluge.plugins.ltconfig.util');
 
 
 if (typeof(console) === 'undefined') {
@@ -46,6 +47,43 @@ if (typeof(console) === 'undefined') {
 Deluge.plugins.ltconfig.PLUGIN_NAME = 'ltConfig';
 Deluge.plugins.ltconfig.MODULE_NAME = 'ltconfig';
 Deluge.plugins.ltconfig.DISPLAY_NAME = _('ltConfig');
+
+
+Deluge.plugins.ltconfig.util.dict_length = function(dict) {
+  var i = 0;
+
+  for (key in dict) {
+    if (dict.hasOwnProperty(key)) {
+      i++;
+    }
+  }
+
+  return i;
+};
+
+
+Deluge.plugins.ltconfig.util.dict_equals = function(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (Deluge.plugins.ltconfig.util.dict_length(a) !=
+      Deluge.plugins.ltconfig.util.dict_length(b)) {
+    return false;
+  }
+
+  for (key in a) {
+    if (!a.hasOwnProperty(key)) {
+      continue;
+    }
+
+    if (!b.hasOwnProperty(key) || a[key] != b[key]) {
+      return false;
+    }
+  }
+
+  return true;
+};
 
 
 Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
