@@ -49,7 +49,7 @@ Deluge.plugins.ltconfig.MODULE_NAME = 'ltconfig';
 Deluge.plugins.ltconfig.DISPLAY_NAME = _('ltConfig');
 
 
-Deluge.plugins.ltconfig.util.dict_length = function(dict) {
+Deluge.plugins.ltconfig.util.dictLength = function(dict) {
   var i = 0;
 
   for (key in dict) {
@@ -62,13 +62,13 @@ Deluge.plugins.ltconfig.util.dict_length = function(dict) {
 };
 
 
-Deluge.plugins.ltconfig.util.dict_equals = function(a, b) {
+Deluge.plugins.ltconfig.util.dictEquals = function(a, b) {
   if (a === b) {
     return true;
   }
 
-  if (Deluge.plugins.ltconfig.util.dict_length(a) !=
-      Deluge.plugins.ltconfig.util.dict_length(b)) {
+  if (Deluge.plugins.ltconfig.util.dictLength(a) !=
+      Deluge.plugins.ltconfig.util.dictLength(b)) {
     return false;
   }
 
@@ -235,7 +235,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             var name = record.get('name');
 
             if (name in settings) {
-              console.log('updated %s', name);
               record.set('enabled', true);
               record.set('setting', settings[name]);
               record.commit();
@@ -282,10 +281,9 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       };
 
       same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
-      same &= Deluge.plugins.ltconfig.util.dict_equals(prefs['settings'],
+      same &= Deluge.plugins.ltconfig.util.dictEquals(prefs['settings'],
         this.preferences['settings']);
 
-      console.log("comparison result: %s", same);
       if (!same) {
         deluge.client.ltconfig.set_preferences(prefs, {
           success: this.onShowPage,
