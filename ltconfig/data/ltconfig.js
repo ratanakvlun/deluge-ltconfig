@@ -307,7 +307,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
     deluge.client.ltconfig.get_original_settings({
       success: function(settings) {
-        this.initialSettings = settings;
+        this.tblSettings.initialSettings = settings;
 
         var keys = [];
         var data = [];
