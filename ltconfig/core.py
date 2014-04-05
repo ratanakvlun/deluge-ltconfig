@@ -205,6 +205,12 @@ class Core(CorePluginBase):
     for k in settings.keys():
       if k not in self._initial_settings:
         del settings[k]
+      else:
+        val_type = type(self._initial_settings[k])
+        try:
+          settings[k] = val_type(settings[k])
+        except TypeError, ValueError:
+          settings[k] = self._initial_settings[k]
 
 
   def _apply_settings(self, settings):
