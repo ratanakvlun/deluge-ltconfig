@@ -263,6 +263,37 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       });
     };
 
+    this.onApply = function() {
+      var settings = {};
+      var store = this.tblSettings.getStore();
+
+      for (var i = 0; i < store.getCount(); i++) {
+        var record = store.getAt(i);
+        var name = record.get('name');
+
+        if (record.get('enabled')) {
+          settings[name] = record.get('setting');
+        }
+      }
+
+      var prefs = {
+        apply_on_start: this.chkApplyOnStart.getValue(),
+        settings: settings,
+      };
+
+      same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
+      same &= Deluge.plugins.ltconfig.util.dict_equals(prefs['settings'],
+        this.preferences['settings']);
+
+      console.log("comparison result: %s", same);
+      if (!same) {
+        deluge.client.ltconfig.set_preferences(prefs, {
+          success: this.onShowPage,
+          scope: this,
+        });
+      }
+    };
+
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
         this.lblVersion.text = this.lblVersion.caption + version;
@@ -307,6 +338,8 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     deluge.preferences.addPage(this.prefsPage);
 
     deluge.preferences.on('show', this.prefsPage.onShowPage, this.prefsPage);
+    deluge.preferences.buttons[2].on('click', this.prefsPage.onApply,
+      this.prefsPage);
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
   },
@@ -315,6 +348,8 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     deluge.preferences.removePage(this.preferencePage);
 
     deluge.preferences.un('show', this.prefsPage.onShowPage, this.prefsPage);
+    deluge.preferences.buttons[2].un('click', this.prefsPage.onApply,
+      this.prefsPage);
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
   },
