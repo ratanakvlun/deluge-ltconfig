@@ -117,6 +117,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       flex: 1,
       autoExpandColumn: 'name',
 
+      viewConfig: {
+        emptyText: _("Loading...")
+      },
+
       colModel: new Ext.grid.ColumnModel({
         defaults: {
           renderer: function(value, meta, record, rowIndex, colIndex, store) {
