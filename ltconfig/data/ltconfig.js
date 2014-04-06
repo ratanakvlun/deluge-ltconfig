@@ -188,9 +188,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
       listeners: {
         viewready: function(store, records, options) {
-          this.autoSizeColumn(0);
-          this.autoSizeColumn(2);
-          this.autoSizeColumn(3);
           this.getView().refresh();
         },
 
@@ -224,19 +221,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         afteredit: function(e) {
           e.record.commit();
         }
-      },
-
-      autoSizeColumn: function(colIndex) {
-        var longest = 1;
-
-        this.getColumnModel().setColumnWidth(colIndex, longest);
-
-        for (var i = 0; i < this.getStore().getCount(); i++) {
-          var cell = this.getView().getCell(i, colIndex);
-          longest = Math.max(longest, cell.firstChild.scrollWidth+8);
-        }
-
-        this.getColumnModel().setColumnWidth(colIndex, longest);
       }
     });
 
