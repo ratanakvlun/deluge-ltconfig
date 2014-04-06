@@ -36,7 +36,7 @@ Ext.namespace('Deluge.plugins.ltconfig.ui');
 Ext.namespace('Deluge.plugins.ltconfig.util');
 
 
-if (typeof(console) === 'undefined') {
+if (!Ext.isDefined(console)) {
   console = {
     log: function() {}
   };
@@ -354,14 +354,14 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
     deluge.preferences.addPage(this.prefsPage);
 
-    console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
+    console.log("%s enabled", Deluge.plugins.ltconfig.PLUGIN_NAME);
   },
 
   onDisable: function() {
     deluge.preferences.removePage(this.prefsPage);
     this.prefsPage.destroy();
 
-    console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
+    console.log("%s disabled", Deluge.plugins.ltconfig.PLUGIN_NAME);
   }
 });
 
