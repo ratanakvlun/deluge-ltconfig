@@ -237,80 +237,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }
     });
 
-    this.onShowPage = function() {
-      deluge.client.ltconfig.get_preferences({
-        success: function(prefs) {
-          this.preferences = prefs;
-          this.chkApplyOnStart.setValue(prefs['apply_on_start']);
-
-          var settings = prefs['settings'];
-          var store = this.tblSettings.getStore();
-
-          for (var i = 0; i < store.getCount(); i++) {
-            var record = store.getAt(i);
-            var name = record.get('name');
-
-            if (name in settings) {
-              record.set('enabled', true);
-              record.set('setting', settings[name]);
-              record.commit();
-            } else if (record.get('enabled')) {
-              record.set('enabled', false);
-              record.commit();
-            }
-          }
-        },
-        scope: this
-      });
-
-      deluge.client.ltconfig.get_settings({
-        success: function(settings) {
-          var store = this.tblSettings.getStore();
-
-          for (var i = 0; i < store.getCount(); i++) {
-            var record = store.getAt(i);
-            var name = record.get('name');
-
-            if (name in settings) {
-              record.set('actual', settings[name]);
-              record.commit();
-            }
-          }
-        },
-        scope: this
-      });
-    };
-
-    this.onApply = function() {
-      var settings = {};
-      var store = this.tblSettings.getStore();
-
-      for (var i = 0; i < store.getCount(); i++) {
-        var record = store.getAt(i);
-        var name = record.get('name');
-
-        if (record.get('enabled')) {
-          settings[name] = record.get('setting');
-        }
-      }
-
-      var prefs = {
-        apply_on_start: this.chkApplyOnStart.getValue(),
-        settings: settings
-      };
-
-      same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
-      same &= Deluge.plugins.ltconfig.util.dictEquals(prefs['settings'],
-        this.preferences['settings']);
-
-      if (!same) {
-        deluge.client.ltconfig.set_preferences(prefs, {
-          success: this.onShowPage,
-          scope: this
-        });
-      }
-    };
-
     deluge.client.on('connected', this.syncWithCore, this);
   },
 
@@ -346,6 +272,80 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       },
       scope: this
     });
+  },
+
+  onShowPage: function() {
+    deluge.client.ltconfig.get_preferences({
+      success: function(prefs) {
+        this.preferences = prefs;
+        this.chkApplyOnStart.setValue(prefs['apply_on_start']);
+
+        var settings = prefs['settings'];
+        var store = this.tblSettings.getStore();
+
+        for (var i = 0; i < store.getCount(); i++) {
+          var record = store.getAt(i);
+          var name = record.get('name');
+
+          if (name in settings) {
+            record.set('enabled', true);
+            record.set('setting', settings[name]);
+            record.commit();
+          } else if (record.get('enabled')) {
+            record.set('enabled', false);
+            record.commit();
+          }
+        }
+      },
+      scope: this
+    });
+
+    deluge.client.ltconfig.get_settings({
+      success: function(settings) {
+        var store = this.tblSettings.getStore();
+
+        for (var i = 0; i < store.getCount(); i++) {
+          var record = store.getAt(i);
+          var name = record.get('name');
+
+          if (name in settings) {
+            record.set('actual', settings[name]);
+            record.commit();
+          }
+        }
+      },
+      scope: this
+    });
+  },
+
+  onApply: function() {
+    var settings = {};
+    var store = this.tblSettings.getStore();
+
+    for (var i = 0; i < store.getCount(); i++) {
+      var record = store.getAt(i);
+      var name = record.get('name');
+
+      if (record.get('enabled')) {
+        settings[name] = record.get('setting');
+      }
+    }
+
+    var prefs = {
+      apply_on_start: this.chkApplyOnStart.getValue(),
+      settings: settings
+    };
+
+    same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
+    same &= Deluge.plugins.ltconfig.util.dictEquals(prefs['settings'],
+      this.preferences['settings']);
+
+    if (!same) {
+      deluge.client.ltconfig.set_preferences(prefs, {
+        success: this.onShowPage,
+        scope: this
+      });
+    }
   }
 });
 
