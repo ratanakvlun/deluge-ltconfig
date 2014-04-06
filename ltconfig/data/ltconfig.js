@@ -237,10 +237,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }
     });
 
-    deluge.client.on('connected', this.syncWithCore, this);
+    deluge.client.on('connected', this.loadBaseState, this);
   },
 
-  syncWithCore: function() {
+  loadBaseState: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
         this.lblVersion.text = this.lblVersion.caption + version;
@@ -274,7 +274,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     });
   },
 
-  onShowPage: function() {
+  loadPrefs: function() {
     deluge.client.ltconfig.get_preferences({
       success: function(prefs) {
         this.preferences = prefs;
@@ -318,7 +318,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     });
   },
 
-  onApply: function() {
+  savePrefs: function() {
     var settings = {};
     var store = this.tblSettings.getStore();
 
@@ -342,7 +342,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
     if (!same) {
       deluge.client.ltconfig.set_preferences(prefs, {
-        success: this.onShowPage,
+        success: this.loadPrefs,
         scope: this
       });
     }
@@ -358,8 +358,8 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
     deluge.preferences.addPage(this.prefsPage);
 
-    deluge.preferences.on('show', this.prefsPage.onShowPage, this.prefsPage);
-    deluge.preferences.buttons[2].on('click', this.prefsPage.onApply,
+    deluge.preferences.on('show', this.prefsPage.loadPrefs, this.prefsPage);
+    deluge.preferences.buttons[2].on('click', this.prefsPage.savePrefs,
       this.prefsPage);
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
@@ -368,8 +368,8 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
   onDisable: function() {
     deluge.preferences.removePage(this.prefsPage);
 
-    deluge.preferences.un('show', this.prefsPage.onShowPage, this.prefsPage);
-    deluge.preferences.buttons[2].un('click', this.prefsPage.onApply,
+    deluge.preferences.un('show', this.prefsPage.loadPrefs, this.prefsPage);
+    deluge.preferences.buttons[2].un('click', this.prefsPage.savePrefs,
       this.prefsPage);
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
