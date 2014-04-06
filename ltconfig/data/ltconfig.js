@@ -224,12 +224,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
     deluge.client.on('connected', this.loadBaseState, this);
     deluge.preferences.on('show', this.loadPrefs, this);
+    deluge.preferences.buttons[1].on('click', this.savePrefs, this);
     deluge.preferences.buttons[2].on('click', this.savePrefs, this);
   },
 
   onDestroy: function() {
     deluge.client.un('connected', this.loadBaseState, this);
     deluge.preferences.un('show', this.loadPrefs, this);
+    deluge.preferences.buttons[1].un('click', this.savePrefs, this);
     deluge.preferences.buttons[2].un('click', this.savePrefs, this);
 
     Deluge.plugins.ltconfig.ui.PreferencePage.superclass.onDestroy.call(this);
