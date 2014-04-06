@@ -258,6 +258,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         }
 
         this.tblSettings.getStore().loadData(data);
+        this.loadPrefs();
       },
       scope: this
     });
