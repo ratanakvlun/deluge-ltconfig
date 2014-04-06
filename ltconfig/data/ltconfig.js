@@ -32,7 +32,6 @@ Copyright:
 */
 
 
-Ext.namespace('Deluge.plugins.ltconfig');
 Ext.namespace('Deluge.plugins.ltconfig.ui');
 Ext.namespace('Deluge.plugins.ltconfig.util');
 
@@ -52,7 +51,7 @@ Deluge.plugins.ltconfig.DISPLAY_NAME = _('ltConfig');
 Deluge.plugins.ltconfig.util.dictLength = function(dict) {
   var i = 0;
 
-  for (key in dict) {
+  for (var key in dict) {
     if (dict.hasOwnProperty(key)) {
       i++;
     }
@@ -72,7 +71,7 @@ Deluge.plugins.ltconfig.util.dictEquals = function(a, b) {
     return false;
   }
 
-  for (key in a) {
+  for (var key in a) {
     if (!a.hasOwnProperty(key)) {
       continue;
     }
@@ -109,7 +108,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       xtype: 'label',
       margins: '5 5 5 5',
       caption: _('libtorrent version') + ": ",
-      text: _('libtorrent version') + ": ?",
+      text: _('libtorrent version') + ": ?"
     });
 
     this.tblSettings = this.add({
@@ -128,9 +127,9 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
               meta.attr = 'style="color: gray;"';
             }
 
-            if (typeof(value) == 'number' && !(parseInt(value) === value)) {
+            if (Ext.isNumber(value) && !(parseInt(value) === value)) {
               return value.toFixed(6);
-            } else if (typeof(value) === 'boolean') {
+            } else if (Ext.isBoolean(value)) {
               return '<div class="x-grid3-check-col' + (value ? '-on' : '') +
                 '" style="width: 20px;">&#160;</div>';
             }
@@ -146,14 +145,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             dataIndex: 'enabled',
             sortable: true,
             hideable: false,
-            width: 30,
+            width: 30
           },
           {
             id: 'name',
             header: _("Name"),
             dataIndex: 'name',
             sortable: true,
-            hideable: false,
+            hideable: false
           },
           {
             id: 'setting',
@@ -163,14 +162,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             width: 60,
             editor: {
               xtype: 'textfield',
-              allowBlank: false,
-            },
+              allowBlank: false
+            }
           },
           {
             id: 'actual',
             header: _("Actual"),
             dataIndex: 'actual',
-            width: 60,
+            width: 60
           }
         ]
       }),
@@ -197,12 +196,11 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           var value = record.get(field);
 
           if (colIndex == 0 || (record.get('enabled') && colIndex == 2)) {
-            if (typeof(value) === 'boolean') {
+            if (Ext.isBoolean(value)) {
               record.set(field, !value);
 
               if (colIndex == 0 && !record.get('enabled')) {
-                record.set('setting',
-                  this.initialSettings[record.get('name')]);
+                record.set('setting', this.baseSettings[record.get('name')]);
               }
 
               record.commit();
@@ -211,7 +209,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         },
 
         beforeedit: function(e) {
-          if (typeof(e.value) === 'boolean') {
+          if (Ext.isBoolean(e.value)) {
             return false;
           }
 
@@ -237,13 +235,13 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
     deluge.client.ltconfig.get_original_settings({
       success: function(settings) {
-        this.tblSettings.initialSettings = settings;
+        this.tblSettings.baseSettings = settings;
 
-        var keys = Ext.keys(settings).sort();
         var data = [];
+        var keys = Ext.keys(settings).sort();
 
         for (var i = 0; i < keys.length; i++) {
-          key = keys[i]
+          var key = keys[i];
           data.push([false, key, settings[key], settings[key]]);
         }
 
