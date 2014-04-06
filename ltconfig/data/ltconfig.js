@@ -223,9 +223,15 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     });
 
     deluge.client.on('connected', this.loadBaseState, this);
+    deluge.preferences.on('show', this.loadPrefs, this);
+    deluge.preferences.buttons[2].on('click', this.savePrefs, this);
   },
 
   onDestroy: function() {
+    deluge.client.un('connected', this.loadBaseState, this);
+    deluge.preferences.un('show', this.loadPrefs, this);
+    deluge.preferences.buttons[2].un('click', this.savePrefs, this);
+
     Deluge.plugins.ltconfig.ui.PreferencePage.superclass.onDestroy.call(this);
   },
 
@@ -345,19 +351,12 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
     deluge.preferences.addPage(this.prefsPage);
 
-    deluge.preferences.on('show', this.prefsPage.loadPrefs, this.prefsPage);
-    deluge.preferences.buttons[2].on('click', this.prefsPage.savePrefs,
-      this.prefsPage);
-
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " enabled");
   },
 
   onDisable: function() {
     deluge.preferences.removePage(this.prefsPage);
-
-    deluge.preferences.un('show', this.prefsPage.loadPrefs, this.prefsPage);
-    deluge.preferences.buttons[2].un('click', this.prefsPage.savePrefs,
-      this.prefsPage);
+    this.prefsPage.destroy();
 
     console.log(Deluge.plugins.ltconfig.PLUGIN_NAME + " disabled");
   }
