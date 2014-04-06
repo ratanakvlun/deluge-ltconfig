@@ -358,6 +358,7 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
   },
 
   onDisable: function() {
+    deluge.preferences.selectPage(_('Plugins'));
     deluge.preferences.removePage(this.prefsPage);
     this.prefsPage.destroy();
 
