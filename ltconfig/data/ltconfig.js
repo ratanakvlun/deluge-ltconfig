@@ -267,6 +267,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   },
 
   loadPrefs: function() {
+    if (!deluge.preferences.isVisible()) {
+      return;
+    }
+
     deluge.client.ltconfig.get_preferences({
       success: function(prefs) {
         this.preferences = prefs;
