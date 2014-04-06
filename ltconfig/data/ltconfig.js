@@ -225,6 +225,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     deluge.client.on('connected', this.loadBaseState, this);
   },
 
+  onDestroy: function() {
+    Deluge.plugins.ltconfig.ui.PreferencePage.superclass.onDestroy.call(this);
+  },
+
   loadBaseState: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
