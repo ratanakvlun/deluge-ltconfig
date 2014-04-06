@@ -291,17 +291,21 @@ class GtkUI(GtkPluginBase):
       return
 
     settings = {}
+    apply_ = false
 
     for row in self._view.get_model():
       if row[0]:
         settings[row[1]] = row[2]
+        apply_ |= row[2] != row[3]
 
     preferences = {
       "settings": settings,
       "apply_on_start": self._chk_apply_on_start.get_active(),
     }
 
-    if not dict_equals(preferences, self._prefs):
+    apply_ |= not dict_equals(preferences, self._prefs)
+
+    if apply_:
       client.ltconfig.set_preferences(preferences)
     else:
       log.debug("No settings were changed")
