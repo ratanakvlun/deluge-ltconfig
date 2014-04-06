@@ -304,6 +304,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   savePrefs: function() {
     var settings = {};
     var store = this.tblSettings.getStore();
+    var apply = false;
 
     for (var i = 0; i < store.getCount(); i++) {
       var record = store.getAt(i);
@@ -311,6 +312,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
 
       if (record.get('enabled')) {
         settings[name] = record.get('setting');
+        apply |= record.get('setting') != record.get('actual');
       }
     }
 
@@ -319,11 +321,11 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       settings: settings
     };
 
-    same = (prefs['apply_on_start'] == this.preferences['apply_on_start']);
-    same &= Deluge.plugins.ltconfig.util.dictEquals(prefs['settings'],
+    apply |= prefs['apply_on_start'] != this.preferences['apply_on_start'];
+    apply |= !Deluge.plugins.ltconfig.util.dictEquals(prefs['settings'],
       this.preferences['settings']);
 
-    if (!same) {
+    if (apply) {
       deluge.client.ltconfig.set_preferences(prefs, {
         success: this.loadPrefs,
         scope: this
