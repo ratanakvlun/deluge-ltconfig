@@ -252,16 +252,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       success: function(settings) {
         this.tblSettings.initialSettings = settings;
 
-        var keys = [];
+        var keys = Ext.keys(settings).sort();
         var data = [];
-
-        for (var key in settings) {
-          if (settings.hasOwnProperty(key)) {
-            keys.push(key);
-          }
-        }
-
-        keys.sort();
 
         for (var i = 0; i < keys.length; i++) {
           key = keys[i]
