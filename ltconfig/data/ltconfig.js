@@ -308,6 +308,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }
     };
 
+    deluge.client.on('connected', this.syncWithCore, this);
+  },
+
+  syncWithCore: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
         this.lblVersion.text = this.lblVersion.caption + version;
