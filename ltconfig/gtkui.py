@@ -291,7 +291,7 @@ class GtkUI(GtkPluginBase):
       return
 
     settings = {}
-    apply_ = false
+    apply_ = False
 
     for row in self._view.get_model():
       if row[0]:
