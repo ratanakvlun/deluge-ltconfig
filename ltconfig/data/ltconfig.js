@@ -109,7 +109,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       xtype: 'label',
       margins: '5 5 5 5',
       caption: _('libtorrent version') + ": ",
-      text: this.caption + "?"
+      text: _('libtorrent version') + ": ?",
     });
 
     this.tblSettings = this.add({
