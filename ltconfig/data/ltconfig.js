@@ -146,6 +146,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             dataIndex: 'enabled',
             sortable: true,
             hideable: false,
+            width: 30,
           },
           {
             id: 'name',
@@ -159,6 +160,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             header: _("Setting"),
             dataIndex: 'setting',
             hideable: false,
+            width: 60,
             editor: {
               xtype: 'textfield',
               allowBlank: false,
@@ -168,6 +170,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             id: 'actual',
             header: _("Actual"),
             dataIndex: 'actual',
+            width: 60,
           }
         ]
       }),
