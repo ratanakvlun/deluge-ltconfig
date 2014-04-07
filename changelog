@@ -1,3 +1,7 @@
+Version 0.2.3.0
+- Add WebUI support
+- Fix apply button not applying if apply on start is disabled
+
 Version 0.2.2.1
 - Remove save completed check
 - Save settings only if changes were made
