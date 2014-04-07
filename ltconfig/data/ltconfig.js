@@ -237,14 +237,30 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }
     });
 
-    deluge.client.on('connected', this.loadBaseState, this);
     deluge.preferences.on('show', this.loadPrefs, this);
     deluge.preferences.buttons[1].on('click', this.savePrefs, this);
     deluge.preferences.buttons[2].on('click', this.savePrefs, this);
+
+    this.waitForClient(10);
+  },
+
+  waitForClient: function(triesLeft) {
+    if (triesLeft < 1) {
+      this.tblSettings.setEmptyText(_('Unable to load settings'));
+      return;
+    }
+
+    if (deluge.login.isVisible() || !deluge.client.core ||
+        !deluge.client.ltconfig) {
+      var self = this;
+      var t = deluge.login.isVisible() ? triesLeft : triesLeft-1;
+      setTimeout(function() { self.waitForClient.apply(self, [t]); }, 1000);
+    } else if (!this.isDestroyed) {
+      this.loadBaseState();
+    }
   },
 
   onDestroy: function() {
-    deluge.client.un('connected', this.loadBaseState, this);
     deluge.preferences.un('show', this.loadPrefs, this);
     deluge.preferences.buttons[1].un('click', this.savePrefs, this);
     deluge.preferences.buttons[2].un('click', this.savePrefs, this);
