@@ -255,7 +255,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   loadBaseState: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
-        this.lblVersion.text = this.lblVersion.caption + version;
+        this.lblVersion.setText(this.lblVersion.caption + version);
       },
       scope: this
     });
