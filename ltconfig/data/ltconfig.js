@@ -217,6 +217,15 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         afteredit: function(e) {
           e.record.commit();
         }
+      },
+
+      setEmptyText: function(text) {
+        if (this.viewReady) {
+          this.getView().emptyText = text;
+          this.getView().refresh();
+        } else {
+          Ext.apply(this.viewConfig, {emptyText: text});
+        }
       }
     });
 
