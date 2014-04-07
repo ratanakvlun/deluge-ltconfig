@@ -117,7 +117,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       autoExpandColumn: 'name',
 
       viewConfig: {
-        emptyText: _("Loading...")
+        emptyText: _('Loading settings...'),
+        deferEmptyText: false
       },
 
       colModel: new Ext.grid.ColumnModel({
@@ -186,10 +187,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }),
 
       listeners: {
-        viewready: function(store, records, options) {
-          this.getView().refresh();
-        },
-
         cellclick: function(grid, rowIndex, colIndex, e) {
           var record = grid.getStore().getAt(rowIndex);
           var field = grid.getColumnModel().getDataIndex(colIndex);
