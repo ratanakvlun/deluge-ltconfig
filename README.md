@@ -4,7 +4,7 @@ ltConfig
 ltConfig is a plugin for [Deluge](http://deluge-torrent.org) that
 allows direct modification to libtorrent settings.
 
-This is a GtkUI plugin that adds a single preference page.
+This plugin adds a preference page to both GtkUI and WebUI.
 
 WARNING: Modify settings at your own risk!
 
