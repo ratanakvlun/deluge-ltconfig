@@ -227,6 +227,13 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         } else {
           Ext.apply(this.viewConfig, {emptyText: text});
         }
+      },
+
+      loadData: function(data) {
+        this.getStore().loadData(data);
+        if (this.viewReady) {
+          this.getView().updateHeaders();
+        }
       }
     });
 
