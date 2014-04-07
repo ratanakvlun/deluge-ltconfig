@@ -303,10 +303,12 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   },
 
   loadPrefs: function() {
-    if (!deluge.preferences.isVisible()) {
-      return;
+    if (deluge.preferences.isVisible()) {
+      this._loadPrefs1();
     }
+  },
 
+  _loadPrefs1: function() {
     deluge.client.ltconfig.get_preferences({
       success: function(prefs) {
         this.preferences = prefs;
@@ -328,10 +330,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             record.commit();
           }
         }
+
+        this._loadPrefs2();
       },
       scope: this
     });
+  },
 
+  _loadPrefs2: function() {
     deluge.client.ltconfig.get_settings({
       success: function(settings) {
         var store = this.tblSettings.getStore();
