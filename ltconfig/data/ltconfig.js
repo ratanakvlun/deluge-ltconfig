@@ -36,7 +36,7 @@ Ext.namespace('Deluge.plugins.ltconfig.ui');
 Ext.namespace('Deluge.plugins.ltconfig.util');
 
 
-if (!Ext.isDefined(console)) {
+if (typeof(console) === 'undefined') {
   console = {
     log: function() {}
   };
@@ -104,11 +104,12 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       boxLabel: _('Apply settings on startup')
     });
 
+    var caption = _('libtorrent version') + ': ';
     this.lblVersion = this.add({
       xtype: 'label',
       margins: '5 5 5 5',
-      caption: _('libtorrent version') + ": ",
-      text: _('libtorrent version') + ": ?"
+      caption: caption,
+      text: caption + '?'
     });
 
     this.tblSettings = this.add({
@@ -150,14 +151,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           },
           {
             id: 'name',
-            header: _("Name"),
+            header: _('Name'),
             dataIndex: 'name',
             sortable: true,
             hideable: false
           },
           {
             id: 'setting',
-            header: _("Setting"),
+            header: _('Setting'),
             dataIndex: 'setting',
             hideable: false,
             width: 60,
@@ -168,7 +169,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           },
           {
             id: 'actual',
-            header: _("Actual"),
+            header: _('Actual'),
             dataIndex: 'actual',
             width: 60
           }
@@ -351,7 +352,7 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     this.prefsPage = new Deluge.plugins.ltconfig.ui.PreferencePage();
     deluge.preferences.addPage(this.prefsPage);
 
-    console.log("%s enabled", Deluge.plugins.ltconfig.PLUGIN_NAME);
+    console.log('%s enabled', Deluge.plugins.ltconfig.PLUGIN_NAME);
   },
 
   onDisable: function() {
@@ -359,7 +360,7 @@ Deluge.plugins.ltconfig.Plugin = Ext.extend(Deluge.Plugin, {
     deluge.preferences.removePage(this.prefsPage);
     this.prefsPage.destroy();
 
-    console.log("%s disabled", Deluge.plugins.ltconfig.PLUGIN_NAME);
+    console.log('%s disabled', Deluge.plugins.ltconfig.PLUGIN_NAME);
   }
 });
 
