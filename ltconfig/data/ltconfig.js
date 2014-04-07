@@ -326,6 +326,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             record.commit();
           } else if (record.get('enabled')) {
             record.set('enabled', false);
+            record.set('setting', this.tblSettings.baseSettings[name]);
             record.commit();
           }
         }
