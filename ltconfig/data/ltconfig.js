@@ -269,13 +269,20 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   },
 
   loadBaseState: function() {
+    this._loadBaseState1();
+  },
+
+  _loadBaseState1: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
         this.lblVersion.setText(this.lblVersion.caption + version);
+        this._loadBaseState2();
       },
       scope: this
     });
+  },
 
+  _loadBaseState2: function() {
     deluge.client.ltconfig.get_original_settings({
       success: function(settings) {
         this.tblSettings.baseSettings = settings;
