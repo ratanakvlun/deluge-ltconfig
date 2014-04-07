@@ -147,7 +147,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             dataIndex: 'enabled',
             sortable: true,
             hideable: false,
-            width: 30
+            width: 30,
+            menuDisabled: true
           },
           {
             id: 'name',
