@@ -129,7 +129,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
               meta.attr = 'style="color: gray;"';
             }
 
-            if (Ext.isNumber(value) && !(parseInt(value) === value)) {
+            if (Ext.isNumber(value) && parseInt(value) !== value) {
               return value.toFixed(6);
             } else if (Ext.isBoolean(value)) {
               return '<div class="x-grid3-check-col' + (value ? '-on' : '') +
@@ -244,6 +244,14 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     this.waitForClient(10);
   },
 
+  onDestroy: function() {
+    deluge.preferences.un('show', this.loadPrefs, this);
+    deluge.preferences.buttons[1].un('click', this.savePrefs, this);
+    deluge.preferences.buttons[2].un('click', this.savePrefs, this);
+
+    Deluge.plugins.ltconfig.ui.PreferencePage.superclass.onDestroy.call(this);
+  },
+
   waitForClient: function(triesLeft) {
     if (triesLeft < 1) {
       this.tblSettings.setEmptyText(_('Unable to load settings'));
@@ -258,14 +266,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     } else if (!this.isDestroyed) {
       this.loadBaseState();
     }
-  },
-
-  onDestroy: function() {
-    deluge.preferences.un('show', this.loadPrefs, this);
-    deluge.preferences.buttons[1].un('click', this.savePrefs, this);
-    deluge.preferences.buttons[2].un('click', this.savePrefs, this);
-
-    Deluge.plugins.ltconfig.ui.PreferencePage.superclass.onDestroy.call(this);
   },
 
   loadBaseState: function() {
