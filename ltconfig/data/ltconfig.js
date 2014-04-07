@@ -164,8 +164,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
             hideable: false,
             width: 60,
             editor: {
-              xtype: 'textfield',
-              allowBlank: false
+              xtype: 'textfield'
             }
           },
           {
