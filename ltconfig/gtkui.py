@@ -87,6 +87,9 @@ class GtkUI(GtkPluginBase):
     self._lbl_ver = self._ui.get_widget("lbl_version")
     self._chk_apply_on_start = self._ui.get_widget("chk_apply_on_start")
     self._blk_view = self._ui.get_widget("blk_view")
+    self._apply_preset = self._ui.get_widget("apply_preset")
+    self._apply_preset.connect("clicked", self.on_apply_preset_clicked)
+    self._presets = self._ui.get_widget("presets")
 
     self._view = self._build_view()
     window = gtk.ScrolledWindow()
@@ -98,8 +101,19 @@ class GtkUI(GtkPluginBase):
 
     client.core.get_libtorrent_version().addCallback(self._do_update_version)
     client.ltconfig.get_original_settings().addCallback(self._do_complete_init)
-
-
+	
+  def on_apply_preset_clicked(self, button):
+    log.debug("Apply preset...")
+    tree = self._presets.get_active_iter()
+    if tree != None:
+        #model = self._presets.get_model()
+        #row_id, name = model[tree][0]
+        #text = self._presets.get_active_text()
+        id = self._presets.get_active()
+        log.debug("Option=%d" % (id))
+        client.ltconfig.set_preset(id)
+    else:
+        log.debug("None")
   def _do_complete_init(self, settings):
 
     self._initial_settings = settings
@@ -159,8 +173,7 @@ class GtkUI(GtkPluginBase):
       if widget.get_model()[path][0] and column is widget.get_column(2):
         widget.set_cursor(path, column, start_editing=True)
         return True
-
-
+	  
     view.connect("button-press-event", on_button_pressed)
     view.get_selection().set_mode(gtk.SELECTION_NONE)
     view.set_search_column(1)

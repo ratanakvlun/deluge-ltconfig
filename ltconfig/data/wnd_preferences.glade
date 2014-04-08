@@ -1,11 +1,13 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="wnd_preferences">
+    <property name="can_focus">False</property>
     <child>
       <widget class="GtkAlignment" id="blk_preferences">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="top_padding">5</property>
         <property name="bottom_padding">5</property>
         <property name="left_padding">5</property>
@@ -13,65 +15,111 @@
         <child>
           <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">False</property>
             <property name="spacing">16</property>
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">16</property>
                 <child>
-                  <widget class="GtkCheckButton" id="chk_apply_on_start">
-                    <property name="label" translatable="yes">Apply settings on startup</property>
+                  <widget class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <widget class="GtkCheckButton" id="chk_apply_on_start">
+                        <property name="label" translatable="yes">Apply settings on startup</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkComboBox" id="presets">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="items" translatable="yes">High Performace Seed
+Minimum Memory Usage</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="padding">9</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="apply_preset">
+                        <property name="label" translatable="yes">Apply Preset</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">False</property>
                     <property name="spacing">5</property>
                     <child>
                       <widget class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="spacing">5</property>
                         <child>
                           <widget class="GtkLabel" id="lbl_caption">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">libtorrent version:</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <widget class="GtkLabel" id="lbl_version">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <widget class="GtkAlignment" id="blk_view">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="top_padding">5</property>
                         <property name="bottom_padding">5</property>
                         <child>
@@ -79,16 +127,22 @@
                         </child>
                       </widget>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
