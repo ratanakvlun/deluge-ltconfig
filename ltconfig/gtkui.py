@@ -111,7 +111,7 @@ class GtkUI(GtkPluginBase):
         #text = self._presets.get_active_text()
         id = self._presets.get_active()
         log.debug("Option=%d" % (id))
-        client.ltconfig.set_preset(id).addCallback(self._update_actual_values)
+        client.ltconfig.set_preset(id).addCallback(self._update_values_in_preset)
     else:
         log.debug("No preset chosen...")
   def _do_complete_init(self, settings):
@@ -360,3 +360,15 @@ class GtkUI(GtkPluginBase):
 
     for key in settings:
       model.set(self._row_map[key], 3, settings[key])
+      
+  def _update_values_in_preset(self, settings):
+  
+    model = self._view.get_model()
+
+    for key in settings:
+      #log.debug("%s != %s" % (settings[key],model.get_value(self._row_map[key],2)))
+      if settings[key] != model.get_value(self._row_map[key],2):
+        model.set(self._row_map[key], 0, True)
+
+      model.set(self._row_map[key], 2, settings[key])
+      model.set(self._row_map[key], 3, settings[key])    
