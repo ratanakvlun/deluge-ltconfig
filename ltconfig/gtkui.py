@@ -111,9 +111,9 @@ class GtkUI(GtkPluginBase):
         #text = self._presets.get_active_text()
         id = self._presets.get_active()
         log.debug("Option=%d" % (id))
-        client.ltconfig.set_preset(id)
+        client.ltconfig.set_preset(id).addCallback(self._update_actual_values)
     else:
-        log.debug("None")
+        log.debug("No preset chosen...")
   def _do_complete_init(self, settings):
 
     self._initial_settings = settings

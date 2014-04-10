@@ -134,6 +134,28 @@ class Core(CorePluginBase):
       settings_obj = libtorrent.min_memory_usage()
 
     self._session.set_settings(settings_obj)
+    
+    settings = {}
+    
+    for k in dir(settings_obj):
+      if k.startswith("_"):
+        continue
+
+      try:
+        v = getattr(settings_obj, k)
+      except TypeError:
+        continue
+
+      val_type = type(v)
+      if val_type.__module__ == "libtorrent":
+        try:
+          v = int(v)
+        except ValueError:
+          continue
+
+      settings[k] = v
+    
+    return settings
       
   @export
   def set_preferences(self, preferences):
