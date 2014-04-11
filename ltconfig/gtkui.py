@@ -352,7 +352,7 @@ class GtkUI(GtkPluginBase):
     client.ltconfig.get_settings().addCallback(self._update_actual_values)
 
 
-  def _load_settings(settings):
+  def _load_settings(self, settings):
 
     model = self._view.get_model()
 
