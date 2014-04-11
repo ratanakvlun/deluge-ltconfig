@@ -347,25 +347,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       success: function(prefs) {
         this.preferences = prefs;
         this.chkApplyOnStart.setValue(prefs['apply_on_start']);
-
-        var settings = prefs['settings'];
-        var store = this.tblSettings.getStore();
-
-        for (var i = 0; i < store.getCount(); i++) {
-          var record = store.getAt(i);
-          var name = record.get('name');
-
-          if (name in settings) {
-            record.set('enabled', true);
-            record.set('setting', settings[name]);
-            record.commit();
-          } else if (record.get('enabled')) {
-            record.set('enabled', false);
-            record.set('setting', this.tblSettings.baseSettings[name]);
-            record.commit();
-          }
-        }
-
+        this.loadSettings(prefs['settings']);
         this._loadPrefs2();
       },
       scope: this
@@ -442,32 +424,17 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     store.commitChanges();
   },
 
-  loadPresetValues: function(settings) {
-    var store = this.tblSettings.getStore();
-
-    for (var i = 0; i < store.getCount(); i++) {
-      var record = store.getAt(i);
-      var name = record.get('name');
-
-      if (settings[name] != record.get('actual')) {
-        record.set('enabled', true);
-        record.set('setting', settings[name]);
-        record.commit();
-      }
-    }
-  },
-
   loadPreset: function() {
     var preset = this.presets_container.getComponent(0).getValue();
 
     if (preset == 'High Performance Seed') {
       deluge.client.ltconfig.load_preset(0, {
-        success: this.loadPresetValues,
+        success: this.loadSettings,
         scope: this
       });
     } else if (preset == 'Minimum Memory Usage') {
       deluge.client.ltconfig.load_preset(1, {
-        success: this.loadPresetValues,
+        success: this.loadSettings,
         scope: this
       });
     }
