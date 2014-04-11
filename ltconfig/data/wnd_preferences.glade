@@ -23,23 +23,23 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">16</property>
                 <child>
+                  <widget class="GtkCheckButton" id="chk_apply_on_start">
+                    <property name="label" translatable="yes">Apply settings on startup</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <widget class="GtkCheckButton" id="chk_apply_on_start">
-                        <property name="label" translatable="yes">Apply settings on startup</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <widget class="GtkComboBox" id="presets">
                         <property name="visible">True</property>
@@ -48,30 +48,31 @@
 Minimum Memory Usage</property>
                       </widget>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="padding">9</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="apply_preset">
-                        <property name="label" translatable="yes">Apply Preset</property>
+                      <widget class="GtkButton" id="load_preset">
+                        <property name="label" translatable="yes">Load Preset</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                       </widget>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="padding">8</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="padding">9</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -136,7 +137,7 @@ Minimum Memory Usage</property>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </widget>

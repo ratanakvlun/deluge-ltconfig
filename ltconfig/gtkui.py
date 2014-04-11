@@ -87,8 +87,8 @@ class GtkUI(GtkPluginBase):
     self._lbl_ver = self._ui.get_widget("lbl_version")
     self._chk_apply_on_start = self._ui.get_widget("chk_apply_on_start")
     self._blk_view = self._ui.get_widget("blk_view")
-    self._apply_preset = self._ui.get_widget("apply_preset")
-    self._apply_preset.connect("clicked", self.on_apply_preset_clicked)
+    self._apply_preset = self._ui.get_widget("load_preset")
+    self._apply_preset.connect("clicked", self.on_load_preset_clicked)
     self._presets = self._ui.get_widget("presets")
 
     self._view = self._build_view()
@@ -102,8 +102,8 @@ class GtkUI(GtkPluginBase):
     client.core.get_libtorrent_version().addCallback(self._do_update_version)
     client.ltconfig.get_original_settings().addCallback(self._do_complete_init)
 	
-  def on_apply_preset_clicked(self, button):
-    log.debug("Apply preset...")
+  def on_load_preset_clicked(self, button):
+    log.debug("Loading preset...")
     tree = self._presets.get_active_iter()
     if tree != None:
         #model = self._presets.get_model()
@@ -111,7 +111,7 @@ class GtkUI(GtkPluginBase):
         #text = self._presets.get_active_text()
         id = self._presets.get_active()
         log.debug("Option=%d" % (id))
-        client.ltconfig.set_preset(id).addCallback(self._update_values_in_preset)
+        client.ltconfig.load_preset(id).addCallback(self._update_values_in_preset)
     else:
         log.debug("No preset chosen...")
   def _do_complete_init(self, settings):
@@ -371,4 +371,4 @@ class GtkUI(GtkPluginBase):
         model.set(self._row_map[key], 0, True)
 
       model.set(self._row_map[key], 2, settings[key])
-      model.set(self._row_map[key], 3, settings[key])    
+      #model.set(self._row_map[key], 3, settings[key])    

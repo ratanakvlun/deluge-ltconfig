@@ -121,7 +121,7 @@ class Core(CorePluginBase):
     return dict(self._initial_settings)
 
   @export
-  def set_preset(self, preset):
+  def load_preset(self, preset):
     
     log.debug("Set preset")
     
@@ -133,7 +133,7 @@ class Core(CorePluginBase):
       log.debug("Set Minimum Memory Usage Preset...")
       settings_obj = libtorrent.min_memory_usage()
 
-    self._session.set_settings(settings_obj)
+    #self._session.set_settings(settings_obj)
     
     settings = {}
     
