@@ -193,6 +193,31 @@ class Core(CorePluginBase):
     return preferences
 
 
+  def _convert_from_libtorrent_settings(self, settings_obj):
+
+    settings = {}
+
+    for k in dir(settings_obj):
+      if k.startswith("_"):
+        continue
+
+      try:
+        v = getattr(settings_obj, k)
+      except TypeError:
+        continue
+
+      val_type = type(v)
+      if val_type.__module__ == "libtorrent":
+        try:
+          v = int(v)
+        except ValueError:
+          continue
+
+      settings[k] = v
+
+    return settings
+
+
   def _get_session_settings(self, session):
 
     settings = {}
