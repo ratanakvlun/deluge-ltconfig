@@ -423,6 +423,25 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     }
   },
 
+  loadSettings: function(settings) {
+    var store = this.tblSettings.getStore();
+
+    for (var i = 0; i < store.getCount(); i++) {
+      var record = store.getAt(i);
+      var name = record.get('name');
+
+      if (name in settings) {
+        record.set('enabled', true);
+        record.set('setting', settings[name]);
+      } else {
+        record.set('enabled', false);
+        record.set('setting', this.tblSettings.baseSettings[name]);
+      }
+    }
+
+    store.commitChanges();
+  },
+
   loadPresetValues: function(settings) {
     var store = this.tblSettings.getStore();
 
