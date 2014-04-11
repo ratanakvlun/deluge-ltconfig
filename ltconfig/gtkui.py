@@ -87,8 +87,8 @@ class GtkUI(GtkPluginBase):
     self._lbl_ver = self._ui.get_widget("lbl_version")
     self._chk_apply_on_start = self._ui.get_widget("chk_apply_on_start")
     self._blk_view = self._ui.get_widget("blk_view")
-    self._apply_preset = self._ui.get_widget("load_preset")
-    self._apply_preset.connect("clicked", self.on_load_preset_clicked)
+    self._load_preset = self._ui.get_widget("load_preset")
+    self._load_preset.connect("clicked", self.on_load_preset_clicked)
     self._presets = self._ui.get_widget("presets")
 
     self._view = self._build_view()
@@ -291,7 +291,11 @@ class GtkUI(GtkPluginBase):
 
 
   def _do_update_version(self, version):
-
+  
+    if int(version.split('.')[1]) < 15 :
+      self._load_preset.set_sensitive(False)
+      self._presets.set_sensitive(False)
+      
     self._lbl_ver.set_label(version)
 
 
