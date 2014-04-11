@@ -122,7 +122,7 @@ class Core(CorePluginBase):
 
 
   @export
-  def load_preset(self, preset):
+  def get_preset(self, preset):
 
     log.debug("Get preset")
 
