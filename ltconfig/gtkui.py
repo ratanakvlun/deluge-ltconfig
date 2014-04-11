@@ -90,7 +90,7 @@ class GtkUI(GtkPluginBase):
 
     self._presets = self._ui.get_widget("presets")
     self._load_preset = self._ui.get_widget("load_preset")
-    self._load_preset.connect("clicked", self.on_load_preset_clicked)
+    self._load_preset.connect("clicked", self._do_load_preset)
 
     self._view = self._build_view()
     window = gtk.ScrolledWindow()
@@ -102,18 +102,6 @@ class GtkUI(GtkPluginBase):
 
     client.core.get_libtorrent_version().addCallback(self._do_update_version)
     client.ltconfig.get_original_settings().addCallback(self._do_complete_init)
-
-
-  def on_load_preset_clicked(self, button):
-
-    log.debug("Loading preset...")
-
-    index = self._presets.get_active()
-    if index > -1:
-        log.debug("Option=%d", index)
-        client.ltconfig.get_preset(index).addCallback(self._load_settings)
-    else:
-        log.debug("No preset selected...")
 
 
   def _do_complete_init(self, settings):
@@ -300,6 +288,18 @@ class GtkUI(GtkPluginBase):
       self._presets.set_sensitive(False)
 
     self._lbl_ver.set_label(version)
+
+
+  def _do_load_preset(self, button):
+
+    log.debug("Loading preset...")
+
+    index = self._presets.get_active()
+    if index > -1:
+        log.debug("Option=%d", index)
+        client.ltconfig.get_preset(index).addCallback(self._load_settings)
+    else:
+        log.debug("No preset selected...")
 
 
   def _do_save_preferences(self):
