@@ -111,7 +111,7 @@ class GtkUI(GtkPluginBase):
     index = self._presets.get_active()
     if index > -1:
         log.debug("Option=%d", index)
-        client.ltconfig.get_preset(index).addCallback(self._load_preset_values)
+        client.ltconfig.get_preset(index).addCallback(self._load_settings)
     else:
         log.debug("No preset selected...")
 
@@ -347,16 +347,7 @@ class GtkUI(GtkPluginBase):
     self._prefs = preferences
 
     self._chk_apply_on_start.set_active(preferences["apply_on_start"])
-
-    settings = preferences["settings"]
-    model = self._view.get_model()
-
-    for key in self._initial_settings:
-      if key in settings:
-        model.set(self._row_map[key], 0, True, 2, settings[key])
-        continue
-
-      model.set(self._row_map[key], 0, False, 2, self._initial_settings[key])
+    self._load_settings(preferences["settings"])
 
     client.ltconfig.get_settings().addCallback(self._update_actual_values)
 
@@ -379,11 +370,3 @@ class GtkUI(GtkPluginBase):
 
     for key in settings:
       model.set(self._row_map[key], 3, settings[key])
-
-
-  def _load_preset_values(self, settings):
-
-    model = self._view.get_model()
-
-    for key in settings:
-      model.set(self._row_map[key], 0, True, 2, settings[key])
