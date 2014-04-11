@@ -120,7 +120,43 @@ class Core(CorePluginBase):
 
     return dict(self._initial_settings)
 
+  @export
+  def load_preset(self, preset):
+    
+    log.debug("Set preset")
+    
+    if preset == 0:
+      log.debug("Set High Performance Seed Preset...")
+      settings_obj = libtorrent.high_performance_seed()
+      
+    else:     
+      log.debug("Set Minimum Memory Usage Preset...")
+      settings_obj = libtorrent.min_memory_usage()
 
+    #self._session.set_settings(settings_obj)
+    
+    settings = {}
+    
+    for k in dir(settings_obj):
+      if k.startswith("_"):
+        continue
+
+      try:
+        v = getattr(settings_obj, k)
+      except TypeError:
+        continue
+
+      val_type = type(v)
+      if val_type.__module__ == "libtorrent":
+        try:
+          v = int(v)
+        except ValueError:
+          continue
+
+      settings[k] = v
+    
+    return settings
+      
   @export
   def set_preferences(self, preferences):
 

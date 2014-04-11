@@ -103,7 +103,36 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       margins: '0 5 5 5',
       boxLabel: _('Apply settings on startup')
     });
-
+    
+    this.presets_container = this.add({
+      xtype: 'container',
+      layout: 'hbox',
+      autoHeight: true,
+      items: [{
+        xtype: 'combo',
+        itemId: 'preset',
+        margins: '0 5 5 5',
+        queryMode: 'local',
+        fieldLabel: 'Preset',
+        name: 'preset',
+        store: ['High Performance Seed', 'Minimum Memory Usage'],
+        displayField: 'preset',
+        autoSelect: true,
+        forceSelection: true,
+        valueField: 'preset',
+        editable: false,
+        triggerAction: 'all',
+        disableKeyFilter: true,
+        emptyText: 'Choose preset...',
+        flex: 2
+      }, {
+        xtype: 'button',
+        margins: '0 5 5 5',
+        text: 'Load Preset',
+        flex: 1       
+      }]
+    });
+    
     var caption = _('libtorrent version') + ': ';
     this.lblVersion = this.add({
       xtype: 'label',
@@ -239,7 +268,9 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     deluge.preferences.on('show', this.loadPrefs, this);
     deluge.preferences.buttons[1].on('click', this.savePrefs, this);
     deluge.preferences.buttons[2].on('click', this.savePrefs, this);
-
+    
+    this.presets_container.getComponent(1).setHandler(this.loadPreset, this);
+    
     this.waitForClient(10);
   },
 
@@ -274,6 +305,11 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   _loadBaseState1: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
+        if (Number(version.split('.')[1]) < 15) {
+            console.log('Presets not available');
+            this.presets_container.getComponent(0).disable();
+            this.presets_container.getComponent(1).disable();
+        }
         this.lblVersion.setText(this.lblVersion.caption + version);
         this._loadBaseState2();
       },
@@ -386,7 +422,48 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         scope: this
       });
     }
+  },
+  
+  loadPresetValues: function(settings) {
+  
+        var store = this.tblSettings.getStore();
+
+        for (var i = 0; i < store.getCount(); i++) {
+          var record = store.getAt(i);
+          var name = record.get('name');
+          
+          if (settings[name] != record.get('actual')) {
+            record.set('enabled', true);
+            record.set('setting', settings[name]);
+            record.commit();
+          }
+        }
+  
+  },
+  
+  loadPreset: function() {
+  
+    var preset = this.presets_container.getComponent(0).getValue();
+    
+    console.log('Loading preset...');
+    if (preset == 'High Performance Seed') {
+        console.log('High Performance Seed');
+        deluge.client.ltconfig.load_preset(0,{
+          success: this.loadPresetValues,
+          scope: this
+        });
+    } else if (preset == 'Minimum Memory Usage') {
+        console.log('Minimum Memory Usage');
+        deluge.client.ltconfig.load_preset(1,{
+          success: this.loadPresetValues,
+          scope: this
+        });
+    } else {
+        console.log('Nothing selected');
+    }
+        
   }
+  
 });
 
 
