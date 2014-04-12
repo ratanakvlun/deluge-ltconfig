@@ -425,15 +425,15 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   },
 
   loadPreset: function() {
-    var preset = this.presets_container.getComponent(0).getValue();
+    var preset = this.presetsContainer.getComponent(0).getValue();
 
     if (preset == 'High Performance Seed') {
-      deluge.client.ltconfig.load_preset(0, {
+      deluge.client.ltconfig.get_preset(0, {
         success: this.loadSettings,
         scope: this
       });
     } else if (preset == 'Minimum Memory Usage') {
-      deluge.client.ltconfig.load_preset(1, {
+      deluge.client.ltconfig.get_preset(1, {
         success: this.loadSettings,
         scope: this
       });
