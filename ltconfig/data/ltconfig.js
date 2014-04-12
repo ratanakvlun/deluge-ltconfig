@@ -239,24 +239,15 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     this.presetsContainer = this.add({
       xtype: 'container',
       layout: 'hbox',
-      autoHeight: true,
       margins: '10 0 5 0',
       items: [{
         xtype: 'combo',
-        itemId: 'preset',
         margins: '0 5 0 0',
-        queryMode: 'local',
-        fieldLabel: 'Preset',
-        name: 'preset',
-        store: ['High Performance Seed', 'Minimum Memory Usage'],
-        displayField: 'preset',
-        autoSelect: true,
-        forceSelection: true,
-        valueField: 'preset',
+        mode: 'local',
+        store: [[0, 'High Performance Seed'], [1, 'Minimum Memory Usage']],
+        value: 0,
         editable: false,
         triggerAction: 'all',
-        disableKeyFilter: true,
-        emptyText: 'Choose preset...',
         flex: 2
       }, {
         xtype: 'button',
@@ -427,13 +418,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   loadPreset: function() {
     var preset = this.presetsContainer.getComponent(0).getValue();
 
-    if (preset == 'High Performance Seed') {
-      deluge.client.ltconfig.get_preset(0, {
-        success: this.loadSettings,
-        scope: this
-      });
-    } else if (preset == 'Minimum Memory Usage') {
-      deluge.client.ltconfig.get_preset(1, {
+    if (Ext.isNumber(preset)) {
+      deluge.client.ltconfig.get_preset(preset, {
         success: this.loadSettings,
         scope: this
       });
