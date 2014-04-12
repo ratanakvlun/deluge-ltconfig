@@ -104,35 +104,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       boxLabel: _('Apply settings on startup')
     });
 
-    this.presetsContainer = this.add({
-      xtype: 'container',
-      layout: 'hbox',
-      autoHeight: true,
-      items: [{
-        xtype: 'combo',
-        itemId: 'preset',
-        margins: '0 5 5 5',
-        queryMode: 'local',
-        fieldLabel: 'Preset',
-        name: 'preset',
-        store: ['High Performance Seed', 'Minimum Memory Usage'],
-        displayField: 'preset',
-        autoSelect: true,
-        forceSelection: true,
-        valueField: 'preset',
-        editable: false,
-        triggerAction: 'all',
-        disableKeyFilter: true,
-        emptyText: 'Choose preset...',
-        flex: 2
-      }, {
-        xtype: 'button',
-        margins: '0 5 5 5',
-        text: 'Load Preset',
-        flex: 1
-      }]
-    });
-
     var caption = _('libtorrent version') + ': ';
     this.lblVersion = this.add({
       xtype: 'label',
@@ -265,11 +236,40 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       }
     });
 
+    this.presetsContainer = this.add({
+      xtype: 'container',
+      layout: 'hbox',
+      autoHeight: true,
+      margins: '10 0 5 0',
+      items: [{
+        xtype: 'combo',
+        itemId: 'preset',
+        margins: '0 5 0 0',
+        queryMode: 'local',
+        fieldLabel: 'Preset',
+        name: 'preset',
+        store: ['High Performance Seed', 'Minimum Memory Usage'],
+        displayField: 'preset',
+        autoSelect: true,
+        forceSelection: true,
+        valueField: 'preset',
+        editable: false,
+        triggerAction: 'all',
+        disableKeyFilter: true,
+        emptyText: 'Choose preset...',
+        flex: 2
+      }, {
+        xtype: 'button',
+        text: 'Load Preset',
+        flex: 1
+      }]
+    });
+
+    this.presetsContainer.getComponent(1).setHandler(this.loadPreset, this);
+
     deluge.preferences.on('show', this.loadPrefs, this);
     deluge.preferences.buttons[1].on('click', this.savePrefs, this);
     deluge.preferences.buttons[2].on('click', this.savePrefs, this);
-
-    this.presetsContainer.getComponent(1).setHandler(this.loadPreset, this);
 
     this.waitForClient(10);
   },
