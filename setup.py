@@ -42,7 +42,7 @@ from setuptools import setup
 __plugin_name__ = "ltConfig"
 __author__ = "Ratanak Lun"
 __author_email__ = "ratanakvlun@gmail.com"
-__version__ = "0.2.3.0"
+__version__ = "0.2.4.0"
 __url__ = "http://github.com/ratanakvlun"
 __license__ = "GPLv3"
 __description__ = "Modify libtorrent settings"
