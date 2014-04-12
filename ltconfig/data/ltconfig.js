@@ -244,7 +244,11 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         xtype: 'combo',
         margins: '0 5 0 0',
         mode: 'local',
-        store: [[0, 'High Performance Seed'], [1, 'Minimum Memory Usage']],
+        store: [
+          [0, 'Initial Settings'],
+          [1, 'High Performance Seed'],
+          [2, 'Minimum Memory Usage']
+        ],
         value: 0,
         editable: false,
         triggerAction: 'all',
