@@ -286,8 +286,9 @@ class GtkUI(GtkPluginBase):
   def _do_update_version(self, version):
 
     if int(version.split('.')[1]) < 16:
-      self._load_preset.set_sensitive(False)
-      self._presets.set_sensitive(False)
+      model = self._presets.get_model()
+      del model[2]
+      del model[1]
 
     self._lbl_ver.set_label(version)
 
