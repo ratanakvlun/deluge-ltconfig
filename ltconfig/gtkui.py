@@ -89,6 +89,7 @@ class GtkUI(GtkPluginBase):
     self._blk_view = self._ui.get_widget("blk_view")
 
     self._presets = self._ui.get_widget("presets")
+    self._presets.set_active(0)
     self._load_preset = self._ui.get_widget("load_preset")
     self._load_preset.connect("clicked", self._do_load_preset)
 
