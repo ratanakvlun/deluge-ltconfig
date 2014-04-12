@@ -185,7 +185,7 @@ class Core(CorePluginBase):
     settings = {}
 
     for k in dir(settings_obj):
-      if k.startswith("_"):
+      if k.startswith("_") or k == "peer_tos":
         continue
 
       try:
