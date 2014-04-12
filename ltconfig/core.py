@@ -126,14 +126,14 @@ class Core(CorePluginBase):
 
     log.debug("Get preset")
 
-    if preset == 0:
+    settings_obj = None
+
+    if preset == 1:
       if hasattr(libtorrent, "high_performance_seed"):
         settings_obj = libtorrent.high_performance_seed()
-    elif preset == 1:
+    elif preset == 2:
       if hasattr(libtorrent, "min_memory_usage"):
         settings_obj = libtorrent.min_memory_usage()
-    else:
-      settings_obj = None
 
     settings = self._convert_from_libtorrent_settings(settings_obj)
 
