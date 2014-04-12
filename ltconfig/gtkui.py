@@ -182,9 +182,11 @@ class GtkUI(GtkPluginBase):
 
     col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), \
       text=1, sensitive=0)
+    col.set_resizable(True)
     view.append_column(col)
 
     col = gtk.TreeViewColumn(_("Setting"))
+    col.set_resizable(True)
     view.append_column(col)
 
     cr = gtk.CellRendererText()
@@ -202,6 +204,7 @@ class GtkUI(GtkPluginBase):
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
     col = gtk.TreeViewColumn(_("Actual"))
+    col.set_resizable(True)
     view.append_column(col)
 
     cr = gtk.CellRendererText()
