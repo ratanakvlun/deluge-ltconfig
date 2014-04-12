@@ -95,6 +95,7 @@ class GtkUI(GtkPluginBase):
     self._view = self._build_view()
     window = gtk.ScrolledWindow()
     window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+    window.set_shadow_type(gtk.SHADOW_IN)
     window.add(self._view)
     self._blk_view.add(window)
 
