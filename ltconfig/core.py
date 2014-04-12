@@ -133,7 +133,7 @@ class Core(CorePluginBase):
       if hasattr(libtorrent, "min_memory_usage"):
         settings_obj = libtorrent.min_memory_usage()
     else:
-      settings_obj = {}
+      settings_obj = None
 
     settings = self._convert_from_libtorrent_settings(settings_obj)
 
