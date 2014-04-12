@@ -1,3 +1,7 @@
+Version 0.2.4.0
+- Add preset support (from https://github.com/omaralvarez)
+- Allow columns to be resized in GtkUI
+
 Version 0.2.3.0
 - Add WebUI support
 - Fix apply button not applying if apply on start is disabled
