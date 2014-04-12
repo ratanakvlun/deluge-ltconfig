@@ -135,7 +135,13 @@ class Core(CorePluginBase):
     else:
       settings_obj = {}
 
-    return self._convert_from_libtorrent_settings(settings_obj)
+    settings = self._convert_from_libtorrent_settings(settings_obj)
+
+    for key in settings.keys():
+      if settings[key] == self._initial_settings[key]:
+        del settings[key]
+
+    return settings
 
 
   @export
