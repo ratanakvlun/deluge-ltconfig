@@ -239,10 +239,10 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
     this.presetsContainer = this.add({
       xtype: 'container',
       layout: 'hbox',
-      margins: '10 0 5 0',
+      margins: '10 0 0 0',
       items: [{
         xtype: 'combo',
-        margins: '0 5 0 0',
+        margins: '0 8 0 0',
         mode: 'local',
         store: [
           [0, 'Initial Settings'],
@@ -255,8 +255,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         flex: 2
       }, {
         xtype: 'button',
-        text: 'Load Preset',
-        flex: 1
+        text: 'Load Preset'
       }]
     });
 
