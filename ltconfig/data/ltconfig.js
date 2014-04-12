@@ -112,8 +112,32 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
       text: caption + '?'
     });
 
+    this.presetsContainer = this.add({
+      xtype: 'container',
+      layout: 'hbox',
+      margins: '0 5 8 5',
+      items: [{
+        xtype: 'combo',
+        margins: '0 8 0 0',
+        mode: 'local',
+        store: [
+          [0, 'Initial Settings'],
+          [1, 'High Performance Seed'],
+          [2, 'Minimum Memory Usage']
+        ],
+        value: 0,
+        editable: false,
+        triggerAction: 'all',
+        flex: 2
+      }, {
+        xtype: 'button',
+        text: 'Load Preset'
+      }]
+    });
+
     this.tblSettings = this.add({
       xtype: 'editorgrid',
+      margins: '0 5 0 5',
       flex: 1,
       autoExpandColumn: 'name',
 
@@ -234,29 +258,6 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
           this.getView().updateHeaders();
         }
       }
-    });
-
-    this.presetsContainer = this.add({
-      xtype: 'container',
-      layout: 'hbox',
-      margins: '10 0 0 0',
-      items: [{
-        xtype: 'combo',
-        margins: '0 8 0 0',
-        mode: 'local',
-        store: [
-          [0, 'Initial Settings'],
-          [1, 'High Performance Seed'],
-          [2, 'Minimum Memory Usage']
-        ],
-        value: 0,
-        editable: false,
-        triggerAction: 'all',
-        flex: 2
-      }, {
-        xtype: 'button',
-        text: 'Load Preset'
-      }]
     });
 
     this.presetsContainer.getComponent(1).setHandler(this.loadPreset, this);
