@@ -288,7 +288,8 @@ class GtkUI(GtkPluginBase):
 
   def _do_update_version(self, version):
 
-    if int(version.split('.')[1]) < 16:
+    parts = version.split('.')
+    if int(parts[0]) < 1 and int(parts[1]) < 16:
       model = self._presets.get_model()
       del model[2]
       del model[1]

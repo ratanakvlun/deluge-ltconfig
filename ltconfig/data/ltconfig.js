@@ -300,7 +300,8 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
   _loadBaseState1: function() {
     deluge.client.core.get_libtorrent_version({
       success: function(version) {
-        if (Number(version.split('.')[1]) < 16) {
+        var parts = version.split('.');
+        if (Number(parts[0]) < 1 && Number(parts[1]) < 16) {
           this.presetsContainer.getComponent(0).getStore().removeAt(2);
           this.presetsContainer.getComponent(0).getStore().removeAt(1);
         }
