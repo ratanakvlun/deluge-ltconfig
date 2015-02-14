@@ -42,7 +42,7 @@
 import logging
 
 
-import libtorrent
+from deluge._libtorrent import lt as libtorrent
 
 
 from deluge.plugins.pluginbase import CorePluginBase
