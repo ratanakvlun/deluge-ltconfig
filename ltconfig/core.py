@@ -1,42 +1,37 @@
 #
 # core.py
 #
-# Copyright (C) 2014 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2015 Ratanak Lun <ratanakvlun@gmail.com>
 #
-# Basic plugin template created by:
-# Copyright (C) 2008 Martijn Voncken <mvoncken@gmail.com>
-# Copyright (C) 2007-2009 Andrew Resch <andrewresch@gmail.com>
-# Copyright (C) 2009 Damien Churchill <damoxc@gmail.com>
+# This module is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# Deluge is free software.
-#
-# You may redistribute it and/or modify it under the terms of the
-# GNU General Public License, as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option)
-# any later version.
-#
-# deluge is distributed in the hope that it will be useful,
+# This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with deluge.    If not, write to:
-#   The Free Software Foundation, Inc.,
-#   51 Franklin Street, Fifth Floor
-#   Boston, MA  02110-1301, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-#    In addition, as a special exception, the copyright holders give
-#    permission to link the code of portions of this program with the OpenSSL
-#    library.
-#    You must obey the GNU General Public License in all respects for all of
-#    the code used other than OpenSSL. If you modify file(s) with this
-#    exception, you may extend this exception to your version of the file(s),
-#    but you are not obligated to do so. If you do not wish to do so, delete
-#    this exception statement from your version. If you delete this exception
-#    statement from all source files in the program, then also delete it here.
+# Linking this software with other modules is making a combined work
+# based on this software. Thus, the terms and conditions of the GNU
+# General Public License cover the whole combination.
 #
-
+# As a special exception, the copyright holders of this software give
+# you permission to link this software with independent modules to
+# produce a combined work, regardless of the license terms of these
+# independent modules, and to copy and distribute the resulting work
+# under terms of your choice, provided that you also meet, for each
+# linked module in the combined work, the terms and conditions of the
+# license of that module. An independent module is a module which is
+# not derived from or based on this software. If you modify this
+# software, you may extend this exception to your version of the
+# software, but you are not obligated to do so. If you do not wish to
+# do so, delete this exception statement from your version.
+#
 
 
 import logging
