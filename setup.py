@@ -37,7 +37,7 @@
 #    statement from all source files in the program, then also delete it here.
 #
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 __plugin_name__ = "ltConfig"
 __author__ = "Ratanak Lun"
@@ -59,7 +59,7 @@ setup(
     license=__license__,
     long_description=__long_description__ if __long_description__ else __description__,
 
-    packages=[__plugin_name__.lower()],
+    packages=find_packages(),
     package_data = __pkg_data__,
 
     entry_points="""
