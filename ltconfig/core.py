@@ -51,9 +51,10 @@ import deluge.configmanager
 from deluge.core.rpcserver import export
 
 
-from common import PLUGIN_NAME
-from common import MODULE_NAME
-from common import prefix_filter
+from ltconfig.common.plugin import (
+  PLUGIN_NAME, MODULE_NAME,
+  LOG_HANDLER,
+)
 
 
 
@@ -67,7 +68,7 @@ DEFAULT_PREFS = {
 
 
 log = logging.getLogger(__name__)
-log.addFilter(prefix_filter)
+log.addHandler(LOG_HANDLER)
 
 
 
