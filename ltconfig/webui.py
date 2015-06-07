@@ -1,7 +1,7 @@
 #
 # webui.py
 #
-# Copyright (C) 2013 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2015 Ratanak Lun <ratanakvlun@gmail.com>
 #
 # Basic plugin template created by:
 # Copyright (C) 2008 Martijn Voncken <mvoncken@gmail.com>
@@ -40,7 +40,7 @@
 
 from deluge.plugins.pluginbase import WebPluginBase
 
-from ltconfig.common.plugin import (
+from common.plugin import (
   MODULE_NAME, get_resource
 )
 

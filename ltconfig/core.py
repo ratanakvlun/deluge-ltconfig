@@ -46,7 +46,7 @@ import deluge.configmanager
 from deluge.core.rpcserver import export
 
 
-from ltconfig.common.plugin import (
+from common.plugin import (
   PLUGIN_NAME, MODULE_NAME,
   LOG_HANDLER,
 )

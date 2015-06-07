@@ -50,12 +50,12 @@ from deluge.plugins.pluginbase import GtkPluginBase
 import deluge.component as component
 
 
-from ltconfig.common.plugin import (
+from common.plugin import (
   PLUGIN_NAME, DISPLAY_NAME,
   LOG_HANDLER, get_resource,
 )
 
-from ltconfig.common.util import (
+from common.util import (
   dict_equals,
 )
 
