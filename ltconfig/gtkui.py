@@ -55,16 +55,19 @@ from deluge.plugins.pluginbase import GtkPluginBase
 import deluge.component as component
 
 
-from common import PLUGIN_NAME
-from common import DISPLAY_NAME
-from common import get_resource
-from common import prefix_filter
-from common import dict_equals
+from ltconfig.common.plugin import (
+  PLUGIN_NAME, DISPLAY_NAME,
+  LOG_HANDLER, get_resource,
+)
+
+from ltconfig.common.util import (
+  dict_equals,
+)
 
 
 
 log = logging.getLogger(__name__)
-log.addFilter(prefix_filter)
+log.addHandler(LOG_HANDLER)
 
 
 
