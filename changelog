@@ -1,3 +1,6 @@
+Version 0.2.5.0
+- Add support for DHT settings
+
 Version 0.2.4.1
 - Fix ltConfig not trying to use Deluge's libtorrent first
 - Fix libtorrent version checking
