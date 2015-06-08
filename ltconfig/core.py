@@ -36,21 +36,21 @@
 
 import logging
 
-
 from deluge._libtorrent import lt as libtorrent
-
-
 from deluge.plugins.pluginbase import CorePluginBase
 import deluge.component as component
 import deluge.configmanager
 from deluge.core.rpcserver import export
-
 
 from common.plugin import (
   PLUGIN_NAME, MODULE_NAME,
   LOG_HANDLER,
 )
 
+from common.config.file import init_config
+from common.config.plugin import (
+  CONFIG_VERSION, CONFIG_DEFAULTS, CONFIG_SPECS,
+)
 
 
 CONFIG_FILE = "%s.conf" % MODULE_NAME
@@ -61,13 +61,17 @@ DEFAULT_PREFS = {
 }
 
 
-
 log = logging.getLogger(__name__)
 log.addHandler(LOG_HANDLER)
 
 
-
 class Core(CorePluginBase):
+
+  def __init__(self, plugin_name):
+
+    super(Core, self).__init__(plugin_name)
+
+    self._config = None
 
 
   def enable(self):
@@ -89,11 +93,26 @@ class Core(CorePluginBase):
     log.debug("Core enabled")
 
 
+  def _load_config(self):
+
+    config = deluge.configmanager.ConfigManager(CONFIG_FILE)
+
+    old_ver = init_config(config, CONFIG_DEFAULTS,
+      CONFIG_VERSION, CONFIG_SPECS)
+
+    if old_ver != CONFIG_VERSION:
+      log.debug("Config file converted: v%s -> v%s", old_ver, CONFIG_VERSION)
+
+    return config
+
+
   def disable(self):
 
     log.debug("Disabling Core...")
 
-    self._config.save()
+    if self._config:
+      self._config.save()
+
     deluge.configmanager.close(CONFIG_FILE)
 
     self._rpc_deregister(PLUGIN_NAME)
