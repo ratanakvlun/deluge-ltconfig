@@ -189,7 +189,7 @@ class Core(CorePluginBase):
     return preferences
 
 
-  def _convert_from_libtorrent_settings(self, settings_obj):
+  def _convert_from_libtorrent_settings(self, settings_obj, prefix=""):
 
     settings = {}
 
@@ -209,31 +209,47 @@ class Core(CorePluginBase):
         except ValueError:
           continue
 
-      settings[k] = v
+      settings[prefix + k] = v
 
     return settings
 
 
-  def _get_session_settings(self, session):
-
-    return self._convert_from_libtorrent_settings(session.settings())
-
-
-  def _set_session_settings(self, session, settings):
-
-    settings_obj = session.settings()
+  def _convert_to_libtorrent_settings(self, settings, settings_obj, prefix=""):
 
     for k in dir(settings_obj):
       if k.startswith("_"):
         continue
 
-      if k in settings:
+      pk = prefix + k
+      if pk in settings:
         val_type = type(getattr(settings_obj, k))
-        v = val_type(settings[k])
+        v = val_type(settings[pk])
 
         setattr(settings_obj, k, v)
 
+
+  def _get_session_settings(self, session):
+
+    settings = self._convert_from_libtorrent_settings(session.settings())
+
+    if hasattr(session, "get_dht_settings"):
+      dht_settings = self._convert_from_libtorrent_settings(
+        session.get_dht_settings(), "dht.")
+      settings.update(dht_settings)
+
+    return settings
+
+
+  def _set_session_settings(self, session, settings):
+
+    settings_obj = session.settings()
+    self._convert_to_libtorrent_settings(settings, settings_obj)
     session.set_settings(settings_obj)
+
+    if hasattr(session, "get_dht_settings"):
+      settings_obj = session.get_dht_settings()
+      self._convert_to_libtorrent_settings(settings, settings_obj, "dht.")
+      session.set_dht_settings(settings_obj)
 
 
   def _normalize_settings(self, settings):
