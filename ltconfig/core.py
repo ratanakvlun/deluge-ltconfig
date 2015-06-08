@@ -78,6 +78,15 @@ class Core(CorePluginBase):
 
     self._initial_settings = self._get_session_settings(self._session)
 
+    # Hack for getting DHT defaults because Deluge loads previous DHT settings
+    if hasattr(self._session, "get_dht_settings"):
+      dht_settings_obj = libtorrent.dht_settings()
+      self._session.set_dht_settings(dht_settings_obj)
+
+      dht_settings = self._convert_from_libtorrent_settings(
+        dht_settings_obj, "dht.")
+      self._initial_settings.update(dht_settings)
+
     self._settings = self._config["settings"]
     self._normalize_settings(self._settings)
 
