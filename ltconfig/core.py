@@ -55,12 +55,6 @@ from common.config.plugin import (
 
 CONFIG_FILE = "%s.conf" % MODULE_NAME
 
-DEFAULT_PREFS = {
-  "apply_on_start": False,
-  "settings": {},
-}
-
-
 log = logging.getLogger(__name__)
 log.addHandler(LOG_HANDLER)
 
@@ -80,7 +74,7 @@ class Core(CorePluginBase):
 
     self._session = component.get("Core").session
     self._config = deluge.configmanager.ConfigManager(
-        CONFIG_FILE, DEFAULT_PREFS)
+        CONFIG_FILE, CONFIG_DEFAULTS)
 
     self._initial_settings = self._get_session_settings(self._session)
 
