@@ -34,6 +34,7 @@
 #
 
 
+import re
 import logging
 
 from deluge._libtorrent import lt as libtorrent
@@ -57,6 +58,11 @@ CONFIG_FILE = "%s.conf" % MODULE_NAME
 
 log = logging.getLogger(__name__)
 log.addHandler(LOG_HANDLER)
+
+
+SETTING_EXCLUSIONS = [
+  "peer_tos"
+]
 
 
 class Core(CorePluginBase):
@@ -202,8 +208,21 @@ class Core(CorePluginBase):
 
     settings = {}
 
+    if type(settings_obj) == dict:
+      for k in settings_obj:
+        name = prefix + k
+
+        if name in SETTING_EXCLUSIONS:
+          continue
+
+        settings[name] = settings_obj[k]
+
+      return settings
+
     for k in dir(settings_obj):
-      if k.startswith("_") or k == "peer_tos":
+      name = prefix + k
+
+      if k.startswith("_") or name in SETTING_EXCLUSIONS:
         continue
 
       try:
@@ -218,28 +237,38 @@ class Core(CorePluginBase):
         except ValueError:
           continue
 
-      settings[prefix + k] = v
+      settings[name] = v
 
     return settings
 
 
   def _convert_to_libtorrent_settings(self, settings, settings_obj, prefix=""):
 
-    for k in dir(settings_obj):
-      if k.startswith("_"):
+    for name in settings:
+      if not name.startswith(prefix):
         continue
 
-      pk = prefix + k
-      if pk in settings:
-        val_type = type(getattr(settings_obj, k))
-        v = val_type(settings[pk])
+      k = re.sub(r"^%s" % re.escape(prefix), "", name)
 
-        setattr(settings_obj, k, v)
+      if type(settings_obj) == dict:
+        if k in settings_obj:
+          settings_obj[k] = settings[name]
+      else:
+        if k in dir(settings_obj):
+          val_type = type(getattr(settings_obj, k))
+          v = val_type(settings[name])
+
+          setattr(settings_obj, k, v)
 
 
   def _get_session_settings(self, session):
 
-    settings = self._convert_from_libtorrent_settings(session.settings())
+    if hasattr(session, "get_settings"):
+      settings_obj = session.get_settings()
+    else:
+      settings_obj = session.settings()
+
+    settings = self._convert_from_libtorrent_settings(settings_obj)
 
     if hasattr(session, "get_dht_settings"):
       dht_settings = self._convert_from_libtorrent_settings(
@@ -251,9 +280,17 @@ class Core(CorePluginBase):
 
   def _set_session_settings(self, session, settings):
 
-    settings_obj = session.settings()
+    if hasattr(session, "get_settings"):
+      settings_obj = session.get_settings()
+    else:
+      settings_obj = session.settings()
+
     self._convert_to_libtorrent_settings(settings, settings_obj)
-    session.set_settings(settings_obj)
+
+    if hasattr(session, "apply_settings"):
+      session.apply_settings(settings_obj)
+    else:
+      session.set_settings(settings_obj)
 
     if hasattr(session, "get_dht_settings"):
       settings_obj = session.get_dht_settings()
