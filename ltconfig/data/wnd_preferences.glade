@@ -76,9 +76,10 @@
                         <child>
                           <widget class="GtkComboBox" id="presets">
                             <property name="visible">True</property>
-                            <property name="items" translatable="yes">Initial Settings
+                            <property name="items" translatable="yes">Deluge Settings
 High Performance Seed
-Minimum Memory Usage</property>
+Minimum Memory Usage
+Libtorrent Defaults</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

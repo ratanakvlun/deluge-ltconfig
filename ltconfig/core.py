@@ -82,16 +82,8 @@ class Core(CorePluginBase):
     self._config = deluge.configmanager.ConfigManager(
         CONFIG_FILE, CONFIG_DEFAULTS)
 
+    self._default_settings = self._get_session_settings(libtorrent.session())
     self._initial_settings = self._get_session_settings(self._session)
-
-    # Hack for getting DHT defaults because Deluge loads previous DHT settings
-    if hasattr(self._session, "get_dht_settings"):
-      dht_settings_obj = libtorrent.dht_settings()
-      self._session.set_dht_settings(dht_settings_obj)
-
-      dht_settings = self._convert_from_libtorrent_settings(
-        dht_settings_obj, "dht.")
-      self._initial_settings.update(dht_settings)
 
     self._settings = self._config["settings"]
     self._normalize_settings(self._settings)
@@ -148,21 +140,24 @@ class Core(CorePluginBase):
   @export
   def get_preset(self, preset):
 
-    log.debug("Get preset")
+    log.debug("Get preset %d" % preset)
 
-    settings_obj = None
+    settings = {}
 
-    if preset == 1:
-      if hasattr(libtorrent, "high_performance_seed"):
-        settings_obj = libtorrent.high_performance_seed()
-    elif preset == 2:
-      if hasattr(libtorrent, "min_memory_usage"):
-        settings_obj = libtorrent.min_memory_usage()
-
-    settings = self._convert_from_libtorrent_settings(settings_obj)
+    if preset == 3:
+      settings = dict(self._default_settings)
+    else:
+      if preset == 1:
+        if hasattr(libtorrent, "high_performance_seed"):
+          settings_obj = libtorrent.high_performance_seed()
+          settings = self._convert_from_libtorrent_settings(settings_obj)
+      elif preset == 2:
+        if hasattr(libtorrent, "min_memory_usage"):
+          settings_obj = libtorrent.min_memory_usage()
+          settings = self._convert_from_libtorrent_settings(settings_obj)
 
     for key in settings.keys():
-      if settings[key] == self._initial_settings[key]:
+      if key not in self._initial_settings or settings[key] == self._initial_settings[key]:
         del settings[key]
 
     return settings
