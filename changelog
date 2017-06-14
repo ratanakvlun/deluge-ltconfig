@@ -1,3 +1,8 @@
+Version 0.3.0
+- Add support for dict settings (lt >= 0.16.x)
+- Add libtorrent defaults preset
+- Change version to semantic versioning
+
 Version 0.2.5.0
 - Add support for DHT settings
 
