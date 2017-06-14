@@ -77,9 +77,9 @@
                           <widget class="GtkComboBox" id="presets">
                             <property name="visible">True</property>
                             <property name="items" translatable="yes">Deluge Settings
+Libtorrent Defaults
 High Performance Seed
-Minimum Memory Usage
-Libtorrent Defaults</property>
+Minimum Memory Usage</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

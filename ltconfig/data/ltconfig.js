@@ -3,7 +3,7 @@ Script: ltconfig.js
     The client-side javascript code for the ltConfig plugin.
 
 Copyright:
-    (C) Ratanak Lun 2014 <ratanakvlun@gmail.com>
+    (C) Ratanak Lun 2017 <ratanakvlun@gmail.com>
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3, or (at your option)
@@ -122,9 +122,9 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         mode: 'local',
         store: [
           [0, 'Deluge Settings'],
-          [1, 'High Performance Seed'],
-          [2, 'Minimum Memory Usage'],
-          [3, 'Libtorrent Defaults']
+          [1, 'Libtorrent Defaults'],
+          [2, 'High Performance Seed'],
+          [3, 'Minimum Memory Usage']
         ],
         value: 0,
         editable: false,

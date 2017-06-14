@@ -1,7 +1,7 @@
 #
 # core.py
 #
-# Copyright (C) 2015 Ratanak Lun <ratanakvlun@gmail.com>
+# Copyright (C) 2017 Ratanak Lun <ratanakvlun@gmail.com>
 #
 # This module is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,6 +51,10 @@ from common.plugin import (
 from common.config.file import init_config
 from common.config.plugin import (
   CONFIG_VERSION, CONFIG_DEFAULTS, CONFIG_SPECS,
+)
+
+from common.presets import (
+  MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
 )
 
 
@@ -144,17 +148,12 @@ class Core(CorePluginBase):
 
     settings = {}
 
-    if preset == 3:
+    if preset == 1:
       settings = dict(self._default_settings)
-    else:
-      if preset == 1:
-        if hasattr(libtorrent, "high_performance_seed"):
-          settings_obj = libtorrent.high_performance_seed()
-          settings = self._convert_from_libtorrent_settings(settings_obj)
-      elif preset == 2:
-        if hasattr(libtorrent, "min_memory_usage"):
-          settings_obj = libtorrent.min_memory_usage()
-          settings = self._convert_from_libtorrent_settings(settings_obj)
+    elif preset == 2:
+      settings = dict(HIGH_PERFORMANCE_SEED)
+    elif preset == 3:
+      settings = dict(MIN_MEMORY_USAGE)
 
     for key in settings.keys():
       if key not in self._initial_settings or settings[key] == self._initial_settings[key]:
