@@ -54,7 +54,7 @@ from common.config.plugin import (
 )
 
 from common.presets import (
-  MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
+  LIBTORRENT_DEFAULTS, MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
 )
 
 
@@ -86,8 +86,8 @@ class Core(CorePluginBase):
     self._config = deluge.configmanager.ConfigManager(
         CONFIG_FILE, CONFIG_DEFAULTS)
 
-    self._default_settings = self._get_session_settings(libtorrent.session())
     self._initial_settings = self._get_session_settings(self._session)
+    self._default_settings = self.get_preset(1)
 
     self._settings = self._config["settings"]
     self._normalize_settings(self._settings)
@@ -149,7 +149,7 @@ class Core(CorePluginBase):
     settings = {}
 
     if preset == 1:
-      settings = dict(self._default_settings)
+      settings = dict(LIBTORRENT_DEFAULTS)
     elif preset == 2:
       settings = dict(HIGH_PERFORMANCE_SEED)
     elif preset == 3:
