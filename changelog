@@ -1,3 +1,8 @@
+Version 0.3.1
+- Fix hang when using Deluge from Debian 9 repo
+- Improve compatibility of presets
+- Restart network services when settings changed
+
 Version 0.3.0
 - Add support for dict settings (lt >= 0.16.x)
 - Add libtorrent defaults preset
