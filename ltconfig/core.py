@@ -54,7 +54,7 @@ from common.config.plugin import (
 )
 
 from common.presets import (
-  MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
+  LIBTORRENT_DEFAULTS, MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
 )
 
 
@@ -66,6 +66,14 @@ log.addHandler(LOG_HANDLER)
 
 SETTING_EXCLUSIONS = [
   "peer_tos"
+]
+
+# Settings that should be floats before 1.1.x.
+DEPRECATED_FLOATS = [
+  "peer_turnover",
+  "peer_turnover_cutoff",
+  "seed_time_ratio_limit",
+  "share_ratio_limit"
 ]
 
 
@@ -86,8 +94,8 @@ class Core(CorePluginBase):
     self._config = deluge.configmanager.ConfigManager(
         CONFIG_FILE, CONFIG_DEFAULTS)
 
-    self._default_settings = self._get_session_settings(libtorrent.session())
     self._initial_settings = self._get_session_settings(self._session)
+    self._default_settings = self.get_preset(1)
 
     self._settings = self._config["settings"]
     self._normalize_settings(self._settings)
@@ -149,13 +157,20 @@ class Core(CorePluginBase):
     settings = {}
 
     if preset == 1:
-      settings = dict(self._default_settings)
+      settings = dict(LIBTORRENT_DEFAULTS)
     elif preset == 2:
       settings = dict(HIGH_PERFORMANCE_SEED)
     elif preset == 3:
       settings = dict(MIN_MEMORY_USAGE)
 
     for key in settings.keys():
+      # Presets use integer values in place of floats (for >= 1.1.x).
+      # Need to convert to float for earlier versions.
+      if key in DEPRECATED_FLOATS and \
+          (libtorrent.version_major < 1 or \
+          (libtorrent.version_major == 1 and libtorrent.version_minor < 1)):
+        settings[key] = settings[key] / 100.0
+
       if key not in self._initial_settings or settings[key] == self._initial_settings[key]:
         del settings[key]
 

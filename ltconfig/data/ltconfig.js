@@ -121,7 +121,7 @@ Deluge.plugins.ltconfig.ui.PreferencePage = Ext.extend(Ext.Panel, {
         margins: '0 8 0 0',
         mode: 'local',
         store: [
-          [0, 'Deluge Settings'],
+          [0, 'Pre-ltConfig Settings'],
           [1, 'Libtorrent Defaults'],
           [2, 'High Performance Seed'],
           [3, 'Minimum Memory Usage']
