@@ -68,6 +68,14 @@ SETTING_EXCLUSIONS = [
   "peer_tos"
 ]
 
+# Settings that should be floats before 1.1.x.
+DEPRECATED_FLOATS = [
+  "peer_turnover",
+  "peer_turnover_cutoff",
+  "seed_time_ratio_limit",
+  "share_ratio_limit"
+]
+
 
 class Core(CorePluginBase):
 
@@ -156,6 +164,13 @@ class Core(CorePluginBase):
       settings = dict(MIN_MEMORY_USAGE)
 
     for key in settings.keys():
+      # Presets use integer values in place of floats (for >= 1.1.x).
+      # Need to convert to float for earlier versions.
+      if key in DEPRECATED_FLOATS and \
+          (libtorrent.version_major < 1 or \
+          (libtorrent.version_major == 1 and libtorrent.version_minor < 1)):
+        settings[key] = settings[key] / 100.0
+
       if key not in self._initial_settings or settings[key] == self._initial_settings[key]:
         del settings[key]
 
