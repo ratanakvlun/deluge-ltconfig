@@ -76,7 +76,7 @@
                         <child>
                           <widget class="GtkComboBox" id="presets">
                             <property name="visible">True</property>
-                            <property name="items" translatable="yes">Startup Settings
+                            <property name="items" translatable="yes">Pre-ltConfig Settings
 Libtorrent Defaults
 High Performance Seed
 Minimum Memory Usage</property>
