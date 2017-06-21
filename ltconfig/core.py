@@ -68,6 +68,8 @@ SETTING_EXCLUSIONS = [
   "peer_tos"
 ]
 
+NETWORK_SERVICES = ["dht", "lsd", "natpmp", "upnp"]
+
 
 class Core(CorePluginBase):
 
@@ -291,6 +293,9 @@ class Core(CorePluginBase):
       self._convert_to_libtorrent_settings(settings, settings_obj, "dht.")
       session.set_dht_settings(settings_obj)
 
+    self._stop_network_services()
+    self._start_network_services()
+
 
   def _normalize_settings(self, settings):
 
@@ -315,6 +320,26 @@ class Core(CorePluginBase):
           del settings[k]
 
     self._set_session_settings(self._session, settings)
+
+
+  def _start_network_services(self):
+    config = component.get("PreferencesManager").config
+
+    for service in NETWORK_SERVICES:
+      if config[service]:
+        method = getattr(self._session, "start_%s" % service, None)
+        if method:
+          method()
+
+
+  def _stop_network_services(self):
+    config = component.get("PreferencesManager").config
+
+    for service in NETWORK_SERVICES:
+      if config[service]:
+        method = getattr(self._session, "stop_%s" % service, None)
+        if method:
+          method()
 
 
   def _rpc_deregister(self, name):
