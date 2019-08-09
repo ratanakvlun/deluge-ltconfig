@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkListStore" id="model1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Pre-ltConfig Settings</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Libtorrent Defaults</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">High Performance Seed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Minimum Memory Usage</col>
+      </row>
+    </data>
+  </object>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="wnd_preferences">
+    <child>
+      <object class="GtkAlignment" id="blk_preferences">
+        <property name="visible">True</property>
+        <property name="top_padding">5</property>
+        <property name="bottom_padding">5</property>
+        <property name="left_padding">5</property>
+        <property name="right_padding">5</property>
+        <child>
+          <object class="GtkVBox" id="vbox1">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">16</property>
+            <child>
+              <object class="GtkVBox" id="vbox2">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkCheckButton" id="chk_apply_on_start">
+                    <property name="label" translatable="yes">Apply settings on startup</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkVBox" id="vbox3">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkHBox" id="hbox1">
+                        <property name="visible">True</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel" id="lbl_caption">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">libtorrent version:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="lbl_version">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox2">
+                        <property name="visible">True</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkComboBox" id="presets">
+                            <property name="visible">True</property>
+                            <property name="model">model1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="load_preset">
+                            <property name="label" translatable="yes">Load Preset</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="blk_view">
+                        <property name="visible">True</property>
+                        <property name="top_padding">3</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

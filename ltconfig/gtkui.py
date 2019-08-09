@@ -37,25 +37,24 @@
 import logging
 
 
-import gobject
-import gtk
-import gtk.glade
-
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 
 from twisted.internet import reactor
 
 
 from deluge.ui.client import client
-from deluge.plugins.pluginbase import GtkPluginBase
+from deluge.plugins.pluginbase import Gtk3PluginBase
 import deluge.component as component
 
 
-from common.plugin import (
+from .common.plugin import (
   PLUGIN_NAME, DISPLAY_NAME,
   LOG_HANDLER, get_resource,
 )
 
-from common.util import (
+from .common.util import (
   dict_equals,
 )
 
@@ -66,7 +65,7 @@ log.addHandler(LOG_HANDLER)
 
 
 
-class GtkUI(GtkPluginBase):
+class GtkUI(Gtk3PluginBase):
 
 
   def __init__(self, plugin_name):
@@ -79,22 +78,22 @@ class GtkUI(GtkPluginBase):
 
     log.debug("Enabling GtkUI...")
 
-    self._ui = gtk.glade.XML(get_resource("wnd_preferences.glade"))
+    self._ui = gtk.Builder.new_from_file(get_resource("wnd_preferences.ui"))
 
-    self._blk_prefs = self._ui.get_widget("blk_preferences")
-    self._lbl_ver = self._ui.get_widget("lbl_version")
-    self._chk_apply_on_start = self._ui.get_widget("chk_apply_on_start")
-    self._blk_view = self._ui.get_widget("blk_view")
+    self._blk_prefs = self._ui.get_object("blk_preferences")
+    self._lbl_ver = self._ui.get_object("lbl_version")
+    self._chk_apply_on_start = self._ui.get_object("chk_apply_on_start")
+    self._blk_view = self._ui.get_object("blk_view")
 
-    self._presets = self._ui.get_widget("presets")
+    self._presets = self._ui.get_object("presets")
     self._presets.set_active(0)
-    self._load_preset = self._ui.get_widget("load_preset")
+    self._load_preset = self._ui.get_object("load_preset")
     self._load_preset.connect("clicked", self._do_load_preset)
 
     self._view = self._build_view()
     window = gtk.ScrolledWindow()
-    window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-    window.set_shadow_type(gtk.SHADOW_IN)
+    window.set_policy(gtk.PolicyType.AUTOMATIC, gtk.PolicyType.AUTOMATIC)
+    window.set_shadow_type(gtk.ShadowType.IN)
     window.add(self._view)
     self._blk_view.add(window)
 
@@ -149,7 +148,7 @@ class GtkUI(GtkPluginBase):
 
     def on_button_pressed(widget, event):
 
-      if event.button != 1 or event.type != gtk.gdk.BUTTON_PRESS:
+      if event.button != gdk.BUTTON_PRIMARY or event.type != gdk.EventType.BUTTON_PRESS:
         return False
 
       x, y = event.get_coords()
@@ -166,7 +165,7 @@ class GtkUI(GtkPluginBase):
 
 
     view.connect("button-press-event", on_button_pressed)
-    view.get_selection().set_mode(gtk.SELECTION_NONE)
+    view.get_selection().set_mode(gtk.SelectionMode.NONE)
     view.set_search_column(1)
 
     col = gtk.TreeViewColumn()
@@ -175,7 +174,7 @@ class GtkUI(GtkPluginBase):
     cr = gtk.CellRendererToggle()
     cr.set_property("xpad", 4)
     cr.connect("toggled", self._do_enable_toggled, model, 0)
-    col.pack_start(cr)
+    col.pack_start(cr, False)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
     col = gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), \
@@ -190,14 +189,14 @@ class GtkUI(GtkPluginBase):
     cr = gtk.CellRendererText()
     cr.set_property("xalign", 0.0)
     cr.connect("edited", self._do_edited, model, 2)
-    col.pack_start(cr)
+    col.pack_start(cr, False)
     col.set_attributes(cr, editable=0, sensitive=0)
     col.set_cell_data_func(cr, self._render_cell, "text")
 
     cr = gtk.CellRendererToggle()
     cr.set_property("xalign", 0.0)
     cr.connect("toggled", self._do_toggled, model, 2)
-    col.pack_start(cr)
+    col.pack_start(cr, False)
     col.set_attributes(cr, activatable=0, sensitive=0)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
@@ -208,13 +207,13 @@ class GtkUI(GtkPluginBase):
     cr = gtk.CellRendererText()
     cr.set_property("sensitive", False)
     cr.set_property("xalign", 0.0)
-    col.pack_start(cr)
+    col.pack_start(cr, False)
     col.set_cell_data_func(cr, self._render_cell, "text")
 
     cr = gtk.CellRendererToggle()
     cr.set_property("sensitive", False)
     cr.set_property("xalign", 0.0)
-    col.pack_start(cr)
+    col.pack_start(cr, False)
     col.set_cell_data_func(cr, self._render_cell, "toggle")
 
     return view
@@ -270,7 +269,7 @@ class GtkUI(GtkPluginBase):
       elif val_type == float:
         cell.set_property("text", "%f" % value)
       else:
-        cell.set_property("text", value)
+        cell.set_property("text", "%s" % value)
 
     elif cell_type == "toggle":
       if val_type != bool:

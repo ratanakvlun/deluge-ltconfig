@@ -38,7 +38,7 @@ import os
 import pkg_resources
 import gettext
 
-import util
+from . import util
 
 
 _ = gettext.gettext

@@ -43,17 +43,17 @@ import deluge.component as component
 import deluge.configmanager
 from deluge.core.rpcserver import export
 
-from common.plugin import (
+from .common.plugin import (
   PLUGIN_NAME, MODULE_NAME,
   LOG_HANDLER,
 )
 
-from common.config.file import init_config
-from common.config.plugin import (
+from .common.config.file import init_config
+from .common.config.plugin import (
   CONFIG_VERSION, CONFIG_DEFAULTS, CONFIG_SPECS,
 )
 
-from common.presets import (
+from .common.presets import (
   LIBTORRENT_DEFAULTS, MIN_MEMORY_USAGE, HIGH_PERFORMANCE_SEED
 )
 
@@ -165,7 +165,7 @@ class Core(CorePluginBase):
     elif preset == 3:
       settings = dict(MIN_MEMORY_USAGE)
 
-    for key in settings.keys():
+    for key in list(settings.keys()):
       # Presets use integer values in place of floats (for >= 1.1.x).
       # Need to convert to float for earlier versions.
       if key in DEPRECATED_FLOATS and \
@@ -321,18 +321,11 @@ class Core(CorePluginBase):
         val_type = type(self._initial_settings[k])
         try:
           settings[k] = val_type(settings[k])
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
           settings[k] = self._initial_settings[k]
 
 
   def _apply_settings(self, settings):
-
-    for k, v in settings.iteritems():
-      if isinstance(v, unicode):
-        try:
-          settings[k] = str(v)
-        except UnicodeEncodeError:
-          del settings[k]
 
     self._set_session_settings(self._session, settings)
 

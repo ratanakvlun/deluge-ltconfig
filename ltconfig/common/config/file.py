@@ -36,7 +36,7 @@
 
 import copy
 
-from convert import convert
+from .convert import convert
 
 
 def get_version(config):

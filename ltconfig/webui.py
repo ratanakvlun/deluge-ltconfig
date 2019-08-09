@@ -40,7 +40,7 @@
 
 from deluge.plugins.pluginbase import WebPluginBase
 
-from common.plugin import (
+from .common.plugin import (
   MODULE_NAME, get_resource
 )
 
