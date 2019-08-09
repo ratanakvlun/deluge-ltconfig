@@ -6,6 +6,9 @@ allows direct modification to libtorrent settings and has preset support.
 
 This plugin adds a preference page to both GtkUI and WebUI.
 
+The current major version is 2.x. It targets Deluge 2.x and Python 3.
+If you have an older version of Deluge, please use v0.3.1.
+
 WARNING: Modify settings at your own risk!
 
 For information about each setting, see the libtorrent [manual](http://www.rasterbar.com/products/libtorrent/manual.html#session-customization).

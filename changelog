@@ -1,3 +1,6 @@
+Version 2.0.0
+- Update to support Deluge 2.x and Python 3
+
 Version 0.3.1
 - Fix hang when using Deluge from Debian 9 repo
 - Improve compatibility of presets
