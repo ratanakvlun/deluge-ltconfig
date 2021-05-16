@@ -17,6 +17,12 @@
       <row>
         <col id="0" translatable="yes">Minimum Memory Usage</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">Libtorrent Defaults + High Performance Seed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Libtorrent Defaults + Minimum Memory Usage</col>
+      </row>
     </data>
   </object>
   <!-- interface-requires gtk+ 2.16 -->
