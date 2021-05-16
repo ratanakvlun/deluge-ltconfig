@@ -79,7 +79,9 @@
                             <property name="items" translatable="yes">Pre-ltConfig Settings
 Libtorrent Defaults
 High Performance Seed
-Minimum Memory Usage</property>
+Minimum Memory Usage
+Libtorrent Defaults + High Performance Seed
+Libtorrent Defaults + Minimum Memory Usage</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

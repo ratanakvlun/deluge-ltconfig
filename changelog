@@ -1,3 +1,6 @@
+Version 2.0.1
+- Add new presets to apply both libtorrent defaults and the more specific settings
+
 Version 2.0.0
 - Update to support Deluge 2.x and Python 3
 

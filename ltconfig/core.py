@@ -79,6 +79,13 @@ DEPRECATED_FLOATS = [
 NETWORK_SERVICES = ["dht", "lsd", "natpmp", "upnp"]
 
 
+def merged_dict(a, b):
+  dict_a = dict(a)
+  dict_b = dict(b)
+  for key, value in dict_b.items():
+    dict_a[key] = value
+  return dict_a
+
 class Core(CorePluginBase):
 
   def __init__(self, plugin_name):
@@ -164,6 +171,10 @@ class Core(CorePluginBase):
       settings = dict(HIGH_PERFORMANCE_SEED)
     elif preset == 3:
       settings = dict(MIN_MEMORY_USAGE)
+    elif preset == 4:
+      settings = merged_dict(LIBTORRENT_DEFAULTS, HIGH_PERFORMANCE_SEED)
+    elif preset == 5:
+      settings = merged_dict(LIBTORRENT_DEFAULTS, MIN_MEMORY_USAGE)
 
     for key in list(settings.keys()):
       # Presets use integer values in place of floats (for >= 1.1.x).
