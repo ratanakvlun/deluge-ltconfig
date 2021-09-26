@@ -8,7 +8,7 @@ This plugin adds a preference page to both GtkUI and WebUI.
 
 WARNING: Modify settings at your own risk!
 
-For information about each setting, see the libtorrent [manual](http://www.rasterbar.com/products/libtorrent/manual.html#session-customization).
+For information about each setting, see the libtorrent [reference](https://www.rasterbar.com/products/libtorrent/reference.html) and [tuning guide](https://www.rasterbar.com/products/libtorrent/tuning-ref.html).
 NOTE: Older versions of libtorrent may have different setting names.
 
 Building
